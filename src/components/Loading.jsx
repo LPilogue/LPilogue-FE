@@ -21,6 +21,7 @@ const LoadingContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 45px;
+  user-select: none;
 `;
 
 const LoadingText = styled.span`
@@ -28,6 +29,7 @@ const LoadingText = styled.span`
   height: 22px;
   margin: 120px 0px 0px 0px;
   font-size: 20px;
+  user-select: none;
 `;
 
 const LoadingImage = styled.img`
