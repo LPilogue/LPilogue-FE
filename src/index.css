@@ -37,3 +37,52 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* input, textarea 및 placeholder 태그 폰트 유지 */
+input,
+textarea {
+  font-family:
+    'Ownglyph',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 16px; /* 필요에 따라 크기 조정 */
+  color: black; /* 텍스트 색상 */
+}
+
+/* placeholder 스타일 */
+input::placeholder,
+textarea::placeholder {
+  font-family:
+    'Ownglyph',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 16px; /* 필요에 따라 크기 조정 */
+  color: #aaa; /* placeholder 색상 */
+}
+
+/* @keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */
