@@ -3,6 +3,8 @@ import Home from './pages/Home';
 import Write from './pages/Write';
 import Loading from './components/Loading';
 import Chat from './pages/Chat';
+import Mypage from './pages/Mypage';
+import Details from './pages/Details';
 
 function App() {
   return (
@@ -11,6 +13,8 @@ function App() {
       <Route path="/write" element={<Write />} />
       <Route path="/loading" element={<Loading />} />
       <Route path="/chat" element={<Chat />} />
+      <Route path="/mypage" element={<Mypage />} />
+      <Route path="/detail" element={<Details />} />
     </Routes>
   );
 }
