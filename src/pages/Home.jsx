@@ -49,6 +49,7 @@ const UserIcon = styled.div`
   padding: 0px;
   margin: 0px 29px 0px 0px;
   align-self: flex-end;
+  cursor: pointer;
 `;
 
 // 병합된 Home 컴포넌트
@@ -59,10 +60,14 @@ const Home = () => {
     navigate('/write');
   };
 
+  const handleUserIconClick = () => {
+    navigate('/mypage');
+  };
+
   return (
     <Container>
       <Layout>
-        <UserIcon>👤</UserIcon>
+        <UserIcon onClick={handleUserIconClick}>👤</UserIcon>
         <ContentGroup>
           <Greeting>{`만나서 반가워요!`}</Greeting>
           <SubText>오늘은 어떤 일기를 작성해볼까요?</SubText>
