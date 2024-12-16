@@ -5,6 +5,9 @@ import Loading from './components/Loading';
 import Recommend from './pages/Recommend';
 import Representative from './pages/Representative';
 import Result from './pages/Result';
+import Chat from './pages/Chat';
+import Mypage from './pages/Mypage';
+import Details from './pages/Details';
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
       <Route path="/recommend" element={<Recommend />} />
       <Route path="/recommend/confirm" element={<Representative />} />
       <Route path="/recommend/result" element={<Result />} />
+      <Route path="/chat" element={<Chat />} />
+      <Route path="/mypage" element={<Mypage />} />
+      <Route path="/detail" element={<Details />} />
     </Routes>
   );
 }
