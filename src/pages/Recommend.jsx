@@ -108,7 +108,7 @@ const Recommend = () => {
 
   const navigate = useNavigate();
 
-  const songs = recommend && recommend[0] && recommend[0].songs;
+  const { songs } = recommend || {};
 
   // 로컬스토리지에서 데이터 불러오기
   useEffect(() => {
