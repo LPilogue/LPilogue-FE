@@ -1,31 +1,24 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import requestPaper from '../assets/images/requestPaper.svg';
-import logo from '../assets/images/LPilogue_logo.svg';
+import requestPaper from '../assets/images/backgroundImg.svg';
 
-// 부모 컨테이너: 이미지와 글자가 겹치도록 설정
 const Container = styled.div`
   position: relative;
-  width: 100%;
-  max-width: 500px;
-  margin: 80px auto;
+  width: 350px;
+  height: 500px;
+  margin: auto;
   font-family: 'Freesentation';
+  background-image: url(${requestPaper});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
-// 이미지: 배경처럼 깔리게 설정
-const BGimage = styled.img`
-  width: 100%;
-  display: block;
-  z-index: 0;
-`;
-
-// 글자: 이미지 위에 올림
 const Content = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1;
   font-size: 16px;
   text-align: center;
   white-space: nowrap;
@@ -61,8 +54,6 @@ const StyledDate = styled.div`
   margin-bottom: 80px;
 `;
 
-const Logo = styled.img``;
-
 const ResultRequest = () => {
   const [songData, setSongData] = useState({
     name: '곡명 없음',
@@ -79,7 +70,6 @@ const ResultRequest = () => {
 
   return (
     <Container>
-      <BGimage src={requestPaper} alt="background" />
       <Content>
         <Title>REQUEST</Title>
         <Description>
@@ -96,7 +86,6 @@ const ResultRequest = () => {
           </Song>
           <StyledDate>Date: {new Date().toLocaleDateString()}</StyledDate>
         </Info>
-        <Logo src={logo} alt="LPilogue_logo" />
       </Content>
     </Container>
   );

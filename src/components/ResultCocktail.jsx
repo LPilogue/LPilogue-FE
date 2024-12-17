@@ -1,67 +1,63 @@
 import styled from 'styled-components';
-import requestPaper from '../assets/images/requestPaper.svg';
+import requestPaper from '../assets/images/backgroundImg.svg';
 import recommend from '../mockData/recommend';
-import logo from '../assets/images/LPilogue_logo.svg';
 
-// 부모 컨테이너: 이미지와 글자가 겹치도록 설정
 const Container = styled.div`
   position: relative;
-  width: 100%;
-  max-width: 500px;
+  width: 350px;
+  height: 500px;
   margin: 80px auto;
   font-family: 'Freesentation';
+  background-image: url(${requestPaper});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
-// 이미지: 배경처럼 깔리게 설정
-const BGimage = styled.img`
-  width: 100%;
-  display: block;
-  z-index: 0;
-`;
-
-// 글자: 이미지 위에 올림
 const Content = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
   text-align: center;
-  white-space: nowrap;
 `;
 
 const Title = styled.div`
-  font-size: 20px;
-  margin-bottom: 15px;
+  font-size: 24px;
+  margin-bottom: 20px;
 `;
 
 const CocktailImg = styled.img`
-  width: 197px;
+  height: 200px;
+  border-radius: 10px;
+  margin: 10px auto;
 `;
 
 const Name = styled.div`
-  font-size: 28px;
-  margin-bottom: 15px;
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 10px;
 `;
 
 const Description = styled.div`
   font-size: 16px;
-  margin-bottom: 30px;
+  margin: 10px auto 20px;
+  line-height: 1.5;
 `;
-
-const Logo = styled.img``;
 
 const ResultCocktail = () => {
   return (
     <Container>
-      <BGimage src={requestPaper} alt="background" />
       <Content>
         <Title>오늘의 추천 칵테일이에요</Title>
-        <CocktailImg src={recommend.cocktail.filePath} alt="cocktail" />
+        <CocktailImg
+          src={recommend.cocktail.filePath}
+          alt={recommend.cocktail.name}
+        />
         <Name>{recommend.cocktail.name}</Name>
         <Description>{recommend.cocktail.description}</Description>
-        <Logo src={logo} alt="LPilogue_logo" />
       </Content>
     </Container>
   );
