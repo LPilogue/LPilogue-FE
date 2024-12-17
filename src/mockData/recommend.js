@@ -1,6 +1,15 @@
 const recommend = {
   songs: [
     {
+      name: 'You Raise Me Up',
+      isLiked: false,
+      isRep: false,
+      filePath:
+        'https://image.bugsm.co.kr/album/images/200/332/33215.jpg?version=20220112002407.0',
+      artist: 'Josh Groban',
+      songURL: 'https://www.youtube.com/watch?v=aJxrX42WcjQ',
+    },
+    {
       name: '한 페이지가 될 수 있게',
       isLiked: false,
       isRep: false,
@@ -9,15 +18,7 @@ const recommend = {
       artist: '데이식스(Day6)',
       songURL: 'https://www.youtube.com/watch?v=oYvgISKD5Y8',
     },
-    {
-      name: 'APT.',
-      isLiked: false,
-      isRep: false,
-      filePath:
-        'https://image.bugsm.co.kr/album/images/200/41086/4108664.jpg?version=20241206010201.0',
-      artist: '로제(ROSÉ)',
-      songURL: 'https://www.youtube.com/watch?v=ekr2nIex040',
-    },
+
     {
       name: '너와의 모든 지금',
       isLiked: false,
