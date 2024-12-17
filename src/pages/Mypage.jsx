@@ -69,6 +69,7 @@ const Card = styled.div`
 
 const Mypage = () => {
   const today = new Date();
+  // eslint-disable-next-line no-unused-vars
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
 
@@ -88,11 +89,13 @@ const Mypage = () => {
 
       <Navigation>
         <button
+          type="button"
           onClick={() => setCurrentMonth((prev) => (prev > 1 ? prev - 1 : 12))}
         >
           이전 달
         </button>
         <button
+          type="button"
           onClick={() => setCurrentMonth((prev) => (prev < 12 ? prev + 1 : 1))}
           disabled={
             currentYear === today.getFullYear() &&

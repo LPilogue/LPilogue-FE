@@ -7,7 +7,7 @@ import recommend from '../mockData/recommend';
 
 const Container = styled.div`
   display: flex;
-  width: 370px;
+  width: 390px;
   flex-direction: column;
   align-items: center;
   padding: 20px;

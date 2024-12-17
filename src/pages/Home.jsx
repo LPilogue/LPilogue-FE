@@ -69,7 +69,7 @@ const Home = () => {
       <Layout>
         <UserIcon onClick={handleUserIconClick}>👤</UserIcon>
         <ContentGroup>
-          <Greeting>{`만나서 반가워요!`}</Greeting>
+          <Greeting>만나서 반가워요!</Greeting>
           <SubText>오늘은 어떤 일기를 작성해볼까요?</SubText>
         </ContentGroup>
         <WriteButton onClick={handleWriteClick}>일기 쓰기</WriteButton>
