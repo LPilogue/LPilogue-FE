@@ -20,7 +20,7 @@ function App() {
       <Route path="/recommend/result" element={<Result />} />
       <Route path="/chat" element={<Chat />} />
       <Route path="/mypage" element={<Mypage />} />
-      <Route path="/detail" element={<Details />} />
+      <Route path="/diary/:diaryDate" element={<Details />} />
     </Routes>
   );
 }

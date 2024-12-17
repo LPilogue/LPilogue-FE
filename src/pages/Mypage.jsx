@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import monthlyDiary from '../mockData/diary';
 
 const Container = styled.div`
-  max-width: 390px;
+  width: 390px;
   margin: 0 auto;
-  padding: 20px;
+  padding-top: 20px;
   color: #333;
   min-height: 100vh;
 `;
@@ -53,7 +54,7 @@ const Card = styled.div`
   text-align: center;
   background: white;
   border-radius: 10px;
-  padding: 10px;
+  padding: 10px 10px 0 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 
@@ -63,7 +64,7 @@ const Card = styled.div`
   }
 
   p {
-    margin: 10px;
+    margin: 10px 0;
   }
 `;
 
@@ -73,11 +74,24 @@ const Mypage = () => {
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
 
-  const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
   const navigate = useNavigate();
 
-  const handleCardClick = () => {
-    navigate('/detail'); // 모든 카드 클릭 시 "/detail" 페이지로 이동
+  // 현재 월에 해당하는 일기 데이터 필터링
+  const filteredDiary = monthlyDiary.filter((entry) => {
+    const entryDate = new Date(entry.createdAt);
+    return (
+      entryDate.getFullYear() === currentYear &&
+      entryDate.getMonth() + 1 === currentMonth
+    );
+  });
+
+  const handleCardClick = (entry) => {
+    const entryDate = new Date(entry.createdAt);
+    const formattedDate = `${entryDate.getFullYear()}-${String(
+      entryDate.getMonth() + 1,
+    ).padStart(2, '0')}-${String(entryDate.getDate()).padStart(2, '0')}`;
+
+    navigate(`/diary/${formattedDate}`); // 동적 라우트로 이동
   };
 
   return (
@@ -107,17 +121,17 @@ const Mypage = () => {
       </Navigation>
 
       <Grid>
-        {Array.from({ length: daysInMonth }, (_, index) => (
-          <Card key={index} onClick={handleCardClick}>
-            <img
-              src="https://via.placeholder.com/150"
-              alt={`앨범 이미지 ${index + 1}`}
-            />
-            <p>
-              {currentMonth}월 {index + 1}일
-            </p>
-          </Card>
-        ))}
+        {filteredDiary.map((diaryEntry) => {
+          const entryDate = new Date(diaryEntry.createdAt);
+          const formattedDate = `${entryDate.getMonth() + 1}월 ${entryDate.getDate()}일`;
+
+          return (
+            <Card onClick={() => handleCardClick(diaryEntry)}>
+              <img src={diaryEntry.songFilePath} alt={diaryEntry.songName} />
+              <p>{formattedDate}</p>
+            </Card>
+          );
+        })}
       </Grid>
     </Container>
   );
