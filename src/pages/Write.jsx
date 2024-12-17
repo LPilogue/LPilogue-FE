@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import sound from '../assets/images/sound.svg';
 import left from '../assets/images/leftButton.svg';
+import PositiveButton from '../components/PositiveButton';
 
 const Container = styled.div`
   display: flex;
@@ -32,19 +33,6 @@ const Header = styled.div`
 const BackButton = styled.img`
   width: 28px;
   cursor: pointer;
-`;
-
-const Button = styled.button`
-  background-color: ${(props) => (props.active ? '#56B7C4' : '#ccc')};
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: ${(props) => (props.active ? 'pointer' : 'not-allowed')};
-  width: 55px;
-  height: 35px;
-  white-space: nowrap;
-  align-self: flex-end;
-  font-size: 20px;
 `;
 
 const InputDate = styled.input`
@@ -137,21 +125,18 @@ const Write = () => {
     setDate(event.target.value);
   };
 
-  const handleButtonClick = () => {
-    if (date && text.length > 0) {
-      navigate('/recommend');
-    }
-  };
-
   return (
     <Container>
       <Layout>
         <Header>
           <BackButton src={left} alt="back" onClick={() => navigate(-1)} />
-
-          <Button onClick={handleButtonClick} active={text.length > 0}>
-            완료
-          </Button>
+          <PositiveButton
+            onClick={() => {
+              if (date && text.length > 0) {
+                navigate('/recommend');
+              }
+            }}
+          />
         </Header>
         <InputDate
           type="date"

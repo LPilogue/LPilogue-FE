@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import sound from '../assets/images/sound.svg';
 import left from '../assets/images/leftButton.svg';
+import PositiveButton from '../components/PositiveButton';
 
 const StyledVoice = styled.div`
   width: 390px;
@@ -16,18 +17,6 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
-`;
-
-const CompleteButton = styled.button`
-  background-color: #56b7c4;
-  color: white;
-  height: 35px;
-  width: 55px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 20px;
-  font-family: 'Ownglyph';
 `;
 
 const SoundIcon = styled.img`
@@ -45,14 +34,11 @@ const Voice = () => {
     <StyledVoice>
       <Header>
         <BackButton src={left} alt="back" onClick={() => navigate(-1)} />
-        <CompleteButton
-          type="button"
+        <PositiveButton
           onClick={() => {
             navigate('/write');
           }}
-        >
-          완료
-        </CompleteButton>
+        />
       </Header>
       <SoundIcon src={sound} alt="sound" />
       <div>오늘의 이야기를 들려주세요</div>

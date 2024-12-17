@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import leftButton from '../assets/images/leftButton.svg';
 import rightButton from '../assets/images/rightButton.svg';
 import recommend from '../mockData/recommend';
+import PositiveButton from '../components/PositiveButton';
 
 const Container = styled.div`
   display: flex;
@@ -13,24 +14,15 @@ const Container = styled.div`
   padding: 20px;
 `;
 
-const CompleteButton = styled.button`
-  background-color: #56b7c4;
-  color: white;
-  height: 35px;
-  width: 55px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 20px;
+const Header = styled.div`
+  display: flex;
   margin-left: auto;
   margin-right: 20px;
-  font-size: 20px;
-  font-family: 'Ownglyph';
 `;
 
 const Text = styled.div`
   font-size: 24px;
-  margin-bottom: 10px;
+  margin: 20px 0;
   text-align: center;
 `;
 
@@ -104,11 +96,10 @@ const RadioButton = styled.div`
 
 const Recommend = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedSong, setSelectedSong] = useState(null); // 대표곡 정보
-
-  const navigate = useNavigate();
+  const [selectedSong, setSelectedSong] = useState(null);
 
   const { songs } = recommend || {};
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.removeItem('representativeSong');
@@ -145,19 +136,18 @@ const Recommend = () => {
 
   return (
     <Container>
-      <CompleteButton
-        type="button"
-        onClick={() => {
-          const storedSong = localStorage.getItem('representativeSong');
-          if (storedSong) {
-            navigate('/recommend/confirm');
-          } else {
-            alert('대표곡을 선택해주세요.');
-          }
-        }}
-      >
-        완료
-      </CompleteButton>
+      <Header>
+        <PositiveButton
+          onClick={() => {
+            const storedSong = localStorage.getItem('representativeSong');
+            if (storedSong) {
+              navigate('/recommend/confirm');
+            } else {
+              alert('대표곡을 선택해주세요.');
+            }
+          }}
+        />
+      </Header>
       <Text>
         오늘 {emotion}을 느낀 {nickname}님을 위한
         <br />
