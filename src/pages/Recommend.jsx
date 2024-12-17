@@ -7,7 +7,7 @@ import recommend from '../mockData/recommend';
 
 const Container = styled.div`
   display: flex;
-  width: 370px;
+  width: 390px;
   flex-direction: column;
   align-items: center;
   padding: 20px;
@@ -23,7 +23,7 @@ const CompleteButton = styled.button`
   cursor: pointer;
   margin-bottom: 20px;
   margin-left: auto;
-  margin-right: 27px;
+  margin-right: 20px;
   font-size: 20px;
   font-family: 'Ownglyph';
 `;
@@ -110,12 +110,8 @@ const Recommend = () => {
 
   const { songs } = recommend || {};
 
-  // 로컬스토리지에서 데이터 불러오기
   useEffect(() => {
-    const storedSong = localStorage.getItem('representativeSong');
-    if (storedSong) {
-      setSelectedSong(JSON.parse(storedSong)); // JSON 데이터 복원
-    }
+    localStorage.removeItem('representativeSong');
   }, []);
 
   if (!songs || songs.length === 0) {
@@ -152,7 +148,12 @@ const Recommend = () => {
       <CompleteButton
         type="button"
         onClick={() => {
-          navigate('/recommend/confirm');
+          const storedSong = localStorage.getItem('representativeSong');
+          if (storedSong) {
+            navigate('/recommend/confirm');
+          } else {
+            alert('대표곡을 선택해주세요.');
+          }
         }}
       >
         완료
@@ -179,7 +180,6 @@ const Recommend = () => {
         <ArtistName>{currentSong.artist}</ArtistName>
       </SongInfo>
 
-      {/* 대표곡 선택 버튼 */}
       <RepresentativeButton
         onClick={handleRepresentativeSelect}
         isSelected={selectedSong && selectedSong.name === currentSong.name}

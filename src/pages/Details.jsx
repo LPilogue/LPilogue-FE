@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import diary from '../mockData/diary';
 
 const Container = styled.div`
-  max-width: 390px;
   width: 390px;
   margin: 0 auto;
   min-height: 100vh;
@@ -13,15 +13,18 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   button {
     border: none;
     cursor: pointer;
+    font-size: 20px;
   }
 `;
 
 const Title = styled.h2`
   text-align: left;
+  font-weight: 400;
+  font-size: 30px;
+  cursor: pointer;
 `;
 
 const AlbumImage = styled.div`
@@ -31,20 +34,18 @@ const AlbumImage = styled.div`
   margin-top: 48px;
 
   img {
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
 `;
 
 const AlbumText = styled.div`
-  font-weight: bold;
   text-align: center;
   margin-top: 28px;
 
   span {
-    font-weight: normal;
     font-size: 14px;
     display: block;
     margin-top: 5px;
@@ -54,7 +55,7 @@ const AlbumText = styled.div`
 const Content = styled.div`
   margin: 20px 29px;
   line-height: 1.5;
-  white-space: pre-wrap; /* 줄바꿈 유지 */
+  white-space: pre-wrap;
 `;
 
 const DeleteButton = styled.button`
@@ -65,49 +66,54 @@ const DeleteButton = styled.button`
   border-radius: 5px;
   font-size: 14px;
   cursor: pointer;
-  float: right;
 `;
 
 const DetailPage = () => {
-  const navigate = useNavigate('/mypage');
+  const { diaryDate } = useParams();
+  const navigate = useNavigate();
+
+  // 해당 날짜의 일기 데이터 찾기
+  const selectedDiary = diary.find((entry) => {
+    const entryDate = new Date(entry.createdAt);
+    const formattedDate = `${entryDate.getFullYear()}-${String(
+      entryDate.getMonth() + 1,
+    ).padStart(2, '0')}-${String(entryDate.getDate()).padStart(2, '0')}`;
+    return formattedDate === diaryDate;
+  });
 
   const handleBack = () => {
-    navigate(-1); // 뒤로 가기
+    navigate(-1);
   };
 
   const handleDelete = () => {
     alert('일기가 삭제되었습니다.'); // 삭제 동작 (실제 삭제 로직 추가 필요)
   };
 
+  if (!selectedDiary) {
+    return <Container>해당 날짜의 일기를 찾을 수 없습니다.</Container>;
+  }
+
   return (
     <Container>
-      {/* 헤더 */}
       <Header>
-        {/* 타이틀 */}
-        <Title onClick={handleBack}>{`<`} 2024년 12월 1일</Title>
+        <Title onClick={handleBack}>
+          {`<`} {diaryDate}
+        </Title>
         <DeleteButton onClick={handleDelete}>삭제</DeleteButton>
       </Header>
 
-      {/* 앨범 이미지 */}
       <AlbumImage>
-        <img src="https://via.placeholder.com/150" alt="앨범 이미지" />
+        <img src={selectedDiary.songFilePath} alt={selectedDiary.songName} />
       </AlbumImage>
 
       {/* 앨범 제목 */}
       <AlbumText>
-        한 페이지가 될 수 있게
-        <span>데이식스 (DAY6)</span>
+        {selectedDiary.songName}
+        <span>{selectedDiary.artist}</span>
       </AlbumText>
 
       {/* 일기 내용 */}
-      <Content>
-        {`일기 내용을 볼 수 있어요
-일기니까 좀 손글씨 같은 폰트를 써볼까요?
-
-오늘은 날씨가 좋았다
-졸업작품을 만들어야 한다 너무 어렵다
-그냥 졸업시켜주세요`}
-      </Content>
+      <Content>{selectedDiary.content}</Content>
     </Container>
   );
 };

@@ -1,23 +1,37 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import sound from '../assets/images/sound.svg';
+import left from '../assets/images/leftButton.svg';
 
-// Styled Components 정의
-// 가장 큰 Div
 const Container = styled.div`
-  max-width: 390px;
+  display: flex;
+  flex-direction: column;
   width: 390px;
   margin: 0 auto;
   border: none;
   background-color: #f9f2df;
   user-select: none;
+  align-items: center;
 `;
 
 const Layout = styled.div`
   display: flex;
-  margin-top: 12px;
+  margin-top: 20px;
   flex-direction: column;
   gap: 27px;
+`;
+
+const Header = styled.div`
+  display: flex;
+  width: 350px;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const BackButton = styled.img`
+  width: 28px;
+  cursor: pointer;
 `;
 
 const Button = styled.button`
@@ -28,9 +42,9 @@ const Button = styled.button`
   cursor: ${(props) => (props.active ? 'pointer' : 'not-allowed')};
   width: 55px;
   height: 35px;
-  margin-right: 27px;
   white-space: nowrap;
   align-self: flex-end;
+  font-size: 20px;
 `;
 
 const InputDate = styled.input`
@@ -40,14 +54,19 @@ const InputDate = styled.input`
   border: none;
   border-radius: 4px;
   outline: none;
-  padding: 0px 27px;
+  padding: 0px 10px;
   box-sizing: border-box;
   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
+  font-size: 20px;
 `;
 
 const TextareaContainer = styled.div`
-  position: relative;
-  margin: 24px 33px 0px 27px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 480px;
 `;
 
 const Textarea = styled.textarea`
@@ -58,14 +77,38 @@ const Textarea = styled.textarea`
   outline: none;
   background-color: #f9f2df;
   resize: none;
+  font-size: 20px;
+  margin-bottom: 5px;
+
+  &::placeholder {
+    font-size: 20px;
+  }
+`;
+
+const BottomMenu = styled.div`
+  display: flex;
+  width: 330px;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const VoiceButton = styled.div`
+  display: flex;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  img {
+    width: 20px;
+    margin-right: 5px;
+  }
 `;
 
 const TextareaLabel = styled.span`
-  position: absolute;
-  width: 50px;
-  height: 20px;
-  bottom: 15px;
-  right: 8px;
+  display: flex;
+  margin-left: auto;
+  margin-right: 35px;
 `;
 
 const Line = styled.hr`
@@ -96,16 +139,20 @@ const Write = () => {
 
   const handleButtonClick = () => {
     if (date && text.length > 0) {
-      navigate('/loading'); // /loading 경로로 이동
+      navigate('/recommend');
     }
   };
 
   return (
     <Container>
       <Layout>
-        <Button onClick={handleButtonClick} active={text.length > 0}>
-          완료
-        </Button>
+        <Header>
+          <BackButton src={left} alt="back" onClick={() => navigate(-1)} />
+
+          <Button onClick={handleButtonClick} active={text.length > 0}>
+            완료
+          </Button>
+        </Header>
         <InputDate
           type="date"
           value={date}
@@ -126,7 +173,13 @@ const Write = () => {
           spellCheck="false"
           maxLength={500}
         />
-        <TextareaLabel>{text.length}/500</TextareaLabel>
+        <BottomMenu>
+          <VoiceButton onClick={() => navigate('/voice')}>
+            <img src={sound} alt="sound" />
+            음성으로 입력하기
+          </VoiceButton>
+          <TextareaLabel>{text.length}/500</TextareaLabel>
+        </BottomMenu>
       </TextareaContainer>
     </Container>
   );
