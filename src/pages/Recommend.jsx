@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import leftButton from '../assets/images/leftButton.svg';
@@ -56,6 +56,7 @@ const AlbumImage = styled.img`
   height: 200px;
   object-fit: cover;
   margin-top: 30px;
+  cursor: pointer;
 `;
 
 const SongInfo = styled.div`
@@ -97,7 +98,7 @@ const RadioButton = styled.div`
 const Recommend = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedSong, setSelectedSong] = useState(null);
-
+  const iframeRef = useRef(null);
   const { songs } = recommend || {};
   const navigate = useNavigate();
 
@@ -111,28 +112,48 @@ const Recommend = () => {
 
   const currentSong = songs[currentIndex];
 
+  const stopSong = () => {
+    if (iframeRef.current) {
+      document.body.removeChild(iframeRef.current);
+      iframeRef.current = null;
+    }
+  };
+
   const handleLeftClick = () => {
+    stopSong();
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? songs.length - 1 : prevIndex - 1,
     );
   };
 
   const handleRightClick = () => {
+    stopSong();
     setCurrentIndex((prevIndex) =>
       prevIndex === songs.length - 1 ? 0 : prevIndex + 1,
     );
   };
 
-  const handleRepresentativeSelect = () => {
-    setSelectedSong(currentSong); // 현재 곡을 대표곡으로 설정
-    localStorage.setItem(
-      'representativeSong',
-      JSON.stringify(currentSong), // JSON 형식으로 저장
-    );
+  const handlePlaySong = () => {
+    const videoURL = songs[currentIndex].songURL;
+    const videoID = new URL(videoURL).searchParams.get('v');
+    const embedURL = `https://www.youtube.com/embed/${videoID}?autoplay=1`;
+
+    if (iframeRef.current) {
+      stopSong(); // 이미 재생 중이면 종료
+    } else {
+      const iframe = document.createElement('iframe');
+      iframe.src = embedURL;
+      iframe.style.display = 'none';
+      iframe.allow = 'autoplay';
+      document.body.appendChild(iframe);
+      iframeRef.current = iframe;
+    }
   };
 
-  const emotion = '행복';
-  const nickname = '김가천';
+  const handleRepresentativeSelect = () => {
+    setSelectedSong(currentSong);
+    localStorage.setItem('representativeSong', JSON.stringify(currentSong));
+  };
 
   return (
     <Container>
@@ -149,17 +170,23 @@ const Recommend = () => {
         />
       </Header>
       <Text>
-        오늘 {emotion}을 느낀 {nickname}님을 위한
+        오늘 행복을 느낀 김가천님을 위한
         <br />
         노래를 추천해줄게요.
       </Text>
-      <SubText>🎧 앨범아트를 클릭하여 노래를 재생할 수 있어요</SubText>
+      <SubText>
+        🎧 앨범아트를 클릭하여 노래를 재생하거나 종료할 수 있어요
+      </SubText>
 
       <SongContainer>
         <ArrowButton onClick={handleLeftClick}>
           <img src={leftButton} alt="Left button" />
         </ArrowButton>
-        <AlbumImage src={currentSong.filePath} alt={currentSong.name} />
+        <AlbumImage
+          src={currentSong.filePath}
+          alt={currentSong.name}
+          onClick={handlePlaySong}
+        />
         <ArrowButton onClick={handleRightClick}>
           <img src={rightButton} alt="Right button" />
         </ArrowButton>
@@ -170,10 +197,7 @@ const Recommend = () => {
         <ArtistName>{currentSong.artist}</ArtistName>
       </SongInfo>
 
-      <RepresentativeButton
-        onClick={handleRepresentativeSelect}
-        isSelected={selectedSong && selectedSong.name === currentSong.name}
-      >
+      <RepresentativeButton onClick={handleRepresentativeSelect}>
         <RadioButton
           isSelected={selectedSong && selectedSong.name === currentSong.name}
         />
