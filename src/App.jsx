@@ -8,6 +8,7 @@ import Result from './pages/Result';
 import Chat from './pages/Chat';
 import Mypage from './pages/Mypage';
 import Details from './pages/Details';
+import Voice from './pages/Voice';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path="/chat" element={<Chat />} />
       <Route path="/mypage" element={<Mypage />} />
       <Route path="/diary/:diaryDate" element={<Details />} />
+      <Route path="/voice" element={<Voice />} />
     </Routes>
   );
 }
