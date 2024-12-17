@@ -133,7 +133,7 @@ const Write = () => {
           <PositiveButton
             onClick={() => {
               if (date && text.length > 0) {
-                navigate('/recommend');
+                navigate('/chat');
               }
             }}
           />
