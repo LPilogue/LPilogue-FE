@@ -3,7 +3,7 @@
 set -e
 
 # default.conf.template 파일에 있는 환경 변수를 실제 값으로 대체하고 결과를 default.conf에 저장
-envsubst '${BACKEND_HOST} ${BACKEND_PORT}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
+envsubst '${BE_HOST} ${BE_PORT} ${REC_HOST} ${REC_PORT}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 
 # 다음 명령어 실행
 exec "$@"
