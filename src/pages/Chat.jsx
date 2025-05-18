@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import LPilogue from '../assets/images/LPilogue.svg';
+import LPilogue from '../assets/images/Logo_LP.svg';
 import chat from '../mockData/chatbot';
 
 const ChatContainer = styled.div`

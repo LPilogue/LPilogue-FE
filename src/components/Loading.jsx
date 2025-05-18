@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import LP from '../assets/images/LPilogue.svg';
+import LP from '../assets/images/Logo_LP.svg';
 
 // 회전 애니메이션 정의
 const rotate = keyframes`
