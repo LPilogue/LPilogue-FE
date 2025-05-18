@@ -15,6 +15,7 @@
       { "devDependencies": ["vite.config.js"] }
     ],
     "import/no-unresolved": ["error", { "ignore": ["\\.svg\\?react$"] }],
-    "react/jsx-props-no-spreading": "off"
+    "react/jsx-props-no-spreading": "off",
+    "react/prop-types": "off"
   }
 }

@@ -12,6 +12,7 @@ const sizeStyles = {
   header: css`
     width: 55px;
     height: 35px;
+    border-radius: 9px;
   `,
 };
 
