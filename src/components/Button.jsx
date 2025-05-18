@@ -6,7 +6,7 @@ const sizeStyles = {
     height: 55px;
   `,
   half: css`
-    width: 112px;
+    width: 100px;
     height: 55px;
   `,
   header: css`
@@ -14,10 +14,14 @@ const sizeStyles = {
     height: 35px;
     border-radius: 9px;
   `,
+  modal: css`
+    width: 100px;
+    height: 35px;
+  `,
 };
 
 const StyledButton = styled.button`
-  background-color: #56b7c4;
+  background-color: ${({ color }) => color};
   color: white;
   border: none;
   border-radius: 5px;
@@ -30,9 +34,9 @@ const StyledButton = styled.button`
   ${({ size = 'full' }) => sizeStyles[size]}
 `;
 
-const Button = ({ size = 'full', children, ...rest }) => {
+const Button = ({ size = 'full', color = '#56b7c4', children, ...rest }) => {
   return (
-    <StyledButton size={size} {...rest}>
+    <StyledButton size={size} color={color} {...rest}>
       {children}
     </StyledButton>
   );

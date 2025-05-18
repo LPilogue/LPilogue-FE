@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Landing from './pages/Landing';
 import Signup from './pages/Signup';
+import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Write from './pages/Write';
 import Loading from './components/Loading';
@@ -18,6 +19,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/signup/profile" element={<Profile />} />
       <Route path="/login" element={<Login />} />
       <Route path="/home" element={<Home />} />
       <Route path="/write" element={<Write />} />
