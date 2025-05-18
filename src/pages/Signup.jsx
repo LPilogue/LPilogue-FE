@@ -19,6 +19,12 @@ const Block = styled.div`
   gap: 5px;
 `;
 
+const LabelWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
 const Label = styled.div`
   font-size: 16px;
 `;
@@ -38,14 +44,25 @@ const Duplication = styled.div`
   cursor: ${({ status }) => (status === 'idle' ? 'pointer' : 'default')};
 `;
 
+const Invalid = styled.div`
+  font-size: 14px;
+  text-align: right;
+  color: #bb3939;
+`;
+
 const Signup = () => {
   const idStatus = 'invalid';
+  const idValid = false;
+  const pwValid = false;
 
   return (
     <Container>
       <Button size="header">완료</Button>
       <Block>
-        <Label>ID</Label>
+        <LabelWrapper>
+          <Label>ID</Label>
+          {!idValid && <Invalid>아이디 형식이 올바르지 않습니다.</Invalid>}
+        </LabelWrapper>
         <Input placeholder="영문 대소문자 / 숫자 6자 이내" />
         {idStatus === 'idle' && (
           <Duplication status="idle">아이디 중복 확인</Duplication>
@@ -58,8 +75,14 @@ const Signup = () => {
         )}
       </Block>
       <Block>
-        <Label>PW</Label>
-        <Input placeholder="영문 대소문자 / 숫자 / 특수문자 8자 이내" />
+        <LabelWrapper>
+          <Label>PW</Label>
+          {!pwValid && <Invalid>비밀번호 형식이 올바르지 않습니다.</Invalid>}
+        </LabelWrapper>
+        <Input
+          placeholder="영문 대소문자 / 숫자 / 특수문자 8자 이내"
+          type="password"
+        />
       </Block>
     </Container>
   );
