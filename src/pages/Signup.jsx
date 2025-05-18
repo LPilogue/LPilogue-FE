@@ -36,6 +36,7 @@ const Duplication = styled.div`
   text-decoration: ${({ status }) =>
     status === 'idle' ? 'underline' : 'none'};
   color: ${({ status }) =>
+    // eslint-disable-next-line no-nested-ternary
     status === 'valid'
       ? '#56b7c4'
       : status === 'invalid'
