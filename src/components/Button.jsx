@@ -1,12 +1,12 @@
 import styled, { css } from 'styled-components';
 
-const sizeStyles = {
+const typeStyles = {
   full: css`
     width: 250px;
     height: 55px;
   `,
   half: css`
-    width: 112px;
+    width: 100px;
     height: 55px;
   `,
   header: css`
@@ -14,10 +14,25 @@ const sizeStyles = {
     height: 35px;
     border-radius: 9px;
   `,
+  modal: css`
+    width: 100px;
+    height: 35px;
+  `,
+  onboarding: css`
+    width: 322px;
+    height: 55px;
+    color: #000;
+    background-color: #fff;
+    border-radius: 10px;
+    &:hover {
+      background-color: #56b7c4;
+      color: #fff;
+    }
+  `,
 };
 
 const StyledButton = styled.button`
-  background-color: #56b7c4;
+  background-color: ${({ color }) => color};
   color: white;
   border: none;
   border-radius: 5px;
@@ -27,12 +42,12 @@ const StyledButton = styled.button`
   border-radius: 13px;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 
-  ${({ size = 'full' }) => sizeStyles[size]}
+  ${({ type = 'full' }) => typeStyles[type]}
 `;
 
-const Button = ({ size = 'full', children, ...rest }) => {
+const Button = ({ type = 'full', color = '#56b7c4', children, ...rest }) => {
   return (
-    <StyledButton size={size} {...rest}>
+    <StyledButton type={type} color={color} {...rest}>
       {children}
     </StyledButton>
   );

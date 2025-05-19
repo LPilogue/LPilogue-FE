@@ -37,7 +37,7 @@ const Login = () => {
           type="password"
         />
       </Block>
-      <Button size="full">로그인</Button>
+      <Button type="full">로그인</Button>
     </Container>
   );
 };

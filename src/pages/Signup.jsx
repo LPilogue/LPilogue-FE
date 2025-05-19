@@ -58,7 +58,7 @@ const Signup = () => {
 
   return (
     <Container>
-      <Button size="header">완료</Button>
+      <Button type="header">완료</Button>
       <Block>
         <LabelWrapper>
           <Label>ID</Label>
