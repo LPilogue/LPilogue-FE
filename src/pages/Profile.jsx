@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -7,8 +8,6 @@ import Modal from '../components/Modal';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   height: 100vh;
   gap: 200px;
 `;
@@ -23,6 +22,7 @@ const InputWrapper = styled.div`
 
 const Title = styled.div`
   font-size: 28px;
+  margin-top: 150px;
 `;
 
 const ButtonWrapper = styled.div`
@@ -33,12 +33,23 @@ const ButtonWrapper = styled.div`
 const Description = styled.span`
   font-size: 28px;
   width: 300px;
+  margin-top: 50px;
+`;
+
+const NextButton = styled(Button)`
+  margin: auto;
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nickname, setNickname] = useState('');
   const [hasNickname, setHasNickname] = useState(false);
+
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -75,9 +86,9 @@ const Profile = () => {
               onChange={(e) => setNickname(e.target.value)}
             />
           </InputWrapper>
-          <Button type="half" onClick={() => setIsModalOpen(true)}>
+          <NextButton type="half" onClick={() => setIsModalOpen(true)}>
             좋아!🥰
-          </Button>
+          </NextButton>
         </>
       ) : (
         <>
@@ -85,10 +96,18 @@ const Profile = () => {
             일기를 쓰기 전<br />
             닉네임님에 대해 알고싶어요.
             <br />
+            <br />
             앞으로 나올 5가지의 질문에
             <br /> 닉네임님의 취향을 선택해주세요!
           </Description>
-          <Button type="half">알겠어!</Button>
+          <NextButton
+            type="half"
+            onClick={() => {
+              navigate('/onboarding');
+            }}
+          >
+            알겠어!
+          </NextButton>
         </>
       )}
     </Container>

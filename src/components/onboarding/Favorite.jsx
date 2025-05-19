@@ -32,7 +32,7 @@ const Favorite = ({ onNext }) => {
         </Question>
         <div>입력하지 않아도 다음으로 넘어갈 수 있어요.</div>
       </div>
-      <Input placeholder="닉네임을 입력해주세요." />
+      <Input placeholder="아티스트명을 입력해주세요." />
       <NextButton type="half" onClick={() => onNext()}>
         다음
       </NextButton>
