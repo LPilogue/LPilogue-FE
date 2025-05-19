@@ -18,7 +18,7 @@ const ButtonWrapper = styled.div`
   gap: 20px;
 `;
 
-const Stress = () => {
+const Stress = ({ onNext }) => {
   return (
     <Container>
       <Question>
@@ -26,8 +26,22 @@ const Stress = () => {
         <br />더 끌리는 음악은?
       </Question>
       <ButtonWrapper>
-        <Button type="onboarding">강렬한 비트와 강한 사운드의 곡</Button>
-        <Button type="onboarding">차분하고 편안한 분위기의 곡</Button>
+        <Button
+          type="onboarding"
+          onClick={() => {
+            onNext();
+          }}
+        >
+          강렬한 비트와 강한 사운드의 곡
+        </Button>
+        <Button
+          type="onboarding"
+          onClick={() => {
+            onNext();
+          }}
+        >
+          차분하고 편안한 분위기의 곡
+        </Button>
       </ButtonWrapper>
     </Container>
   );

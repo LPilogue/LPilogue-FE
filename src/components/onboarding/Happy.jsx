@@ -18,7 +18,7 @@ const ButtonWrapper = styled.div`
   gap: 20px;
 `;
 
-const Happy = () => {
+const Happy = ({ onNext }) => {
   return (
     <Container>
       <Question>
@@ -26,8 +26,22 @@ const Happy = () => {
         <br />더 듣고 싶은 음악은?
       </Question>
       <ButtonWrapper>
-        <Button type="onboarding">신나는 업템포 곡</Button>
-        <Button type="onboarding">잔잔한 분위기의 곡</Button>
+        <Button
+          type="onboarding"
+          onClick={() => {
+            onNext();
+          }}
+        >
+          신나는 업템포 곡
+        </Button>
+        <Button
+          type="onboarding"
+          onClick={() => {
+            onNext();
+          }}
+        >
+          잔잔한 분위기의 곡
+        </Button>
       </ButtonWrapper>
     </Container>
   );

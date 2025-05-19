@@ -18,7 +18,7 @@ const ButtonWrapper = styled.div`
   gap: 20px;
 `;
 
-const Gloomy = () => {
+const Gloomy = ({ onNext }) => {
   return (
     <Container>
       <Question>
@@ -27,8 +27,22 @@ const Gloomy = () => {
         어떤 음악을 찾게 되나요?
       </Question>
       <ButtonWrapper>
-        <Button type="onboarding">슬픔을 더 느낄 수 있는 감성적인 곡</Button>
-        <Button type="onboarding">기분을 바꿔줄 밝은 곡</Button>
+        <Button
+          type="onboarding"
+          onClick={() => {
+            onNext();
+          }}
+        >
+          슬픔을 더 느낄 수 있는 감성적인 곡
+        </Button>
+        <Button
+          type="onboarding"
+          onClick={() => {
+            onNext();
+          }}
+        >
+          기분을 바꿔줄 밝은 곡
+        </Button>
       </ButtonWrapper>
     </Container>
   );
