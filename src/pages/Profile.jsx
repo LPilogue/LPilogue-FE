@@ -50,11 +50,11 @@ const Profile = () => {
             변경할 수 없어요.
           </span>
           <ButtonWrapper>
-            <Button size="modal" color="#B1B1B1">
+            <Button type="modal" color="#B1B1B1">
               취소
             </Button>
             <Button
-              size="modal"
+              type="modal"
               onClick={() => {
                 setIsModalOpen(false);
                 setHasNickname(true);
@@ -75,7 +75,7 @@ const Profile = () => {
               onChange={(e) => setNickname(e.target.value)}
             />
           </InputWrapper>
-          <Button size="half" onClick={() => setIsModalOpen(true)}>
+          <Button type="half" onClick={() => setIsModalOpen(true)}>
             좋아!🥰
           </Button>
         </>
@@ -88,7 +88,7 @@ const Profile = () => {
             앞으로 나올 5가지의 질문에
             <br /> 닉네임님의 취향을 선택해주세요!
           </Description>
-          <Button size="half">알겠어!</Button>
+          <Button type="half">알겠어!</Button>
         </>
       )}
     </Container>

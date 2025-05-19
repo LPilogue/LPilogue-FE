@@ -13,6 +13,7 @@ import Chat from './pages/Chat';
 import Mypage from './pages/Mypage';
 import Details from './pages/Details';
 import Voice from './pages/Voice';
+import Onboarding from './pages/Onboarding';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/signup/profile" element={<Profile />} />
+      <Route path="/onboarding" element={<Onboarding />} />
       <Route path="/login" element={<Login />} />
       <Route path="/home" element={<Home />} />
       <Route path="/write" element={<Write />} />

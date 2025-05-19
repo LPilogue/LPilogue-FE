@@ -15,7 +15,7 @@ const Landing = () => {
   return (
     <Container>
       <LPilogue height="400px" />
-      <Button size="full">로그인</Button>
+      <Button type="full">로그인</Button>
       <div>
         아직 계정이 없다면?<Link to="/signup">회원가입하기</Link>
       </div>
