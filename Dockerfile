@@ -15,11 +15,11 @@ RUN npm run build
 FROM nginx:1.24-alpine
 
 # nginx.conf 파일 가져와서 template안에 넣음
-COPY nginx.conf /etc/nginx/conf.d/default.conf.template
-
+#COPY nginx.conf /etc/nginx/conf.d/default.conf.template
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 # 쉘 명령어들 가져오고 권한 부여
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+#COPY docker-entrypoint.sh /usr/local/bin/
+#RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 
 # 빌드 이미지에서 생성된 dist 폴더를 nginx 이미지로 복사
@@ -27,5 +27,5 @@ COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+#ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
