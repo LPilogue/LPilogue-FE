@@ -10,12 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.2",
-    "styled-components": "^6.1.13"
+    "styled-components": "^6.1.13",
+    "svgr": "^1.10.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
@@ -28,6 +31,7 @@
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.12.0",
     "prettier": "^3.4.1",
-    "vite": "^6.0.1"
+    "vite": "^6.0.1",
+    "vite-plugin-svgr": "^4.3.0"
   }
 }
