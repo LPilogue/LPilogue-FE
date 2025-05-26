@@ -1,5 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
+import Landing from './pages/Landing';
+import Signup from './pages/Signup';
+import Profile from './pages/Profile';
+import Login from './pages/Login';
 import Write from './pages/Write';
 import Loading from './components/Loading';
 import Recommend from './pages/Recommend';
@@ -9,11 +13,17 @@ import Chat from './pages/Chat';
 import Mypage from './pages/Mypage';
 import Details from './pages/Details';
 import Voice from './pages/Voice';
+import Onboarding from './pages/Onboarding';
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Landing />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/signup/profile" element={<Profile />} />
+      <Route path="/onboarding" element={<Onboarding />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/home" element={<Home />} />
       <Route path="/write" element={<Write />} />
       <Route path="/loading" element={<Loading />} />
       <Route path="/recommend" element={<Recommend />} />
