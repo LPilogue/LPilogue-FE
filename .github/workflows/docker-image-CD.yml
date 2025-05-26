@@ -32,10 +32,19 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
+      # lpilogue-be 컨테이너가 이미 실행 중인 경우 중지 및 제거
+      - name: Stop lpilogue-be
+        run: docker stop lpilogue-be || true && docker rm lpilogue-be || true
+      # lpilogue-rec 컨테이너가 이미 실행 중인 경우 중지 및 제거
+      - name: Stop lpilogue-rec
+        run: docker stop lpilogue-rec || true && docker rm lpilogue-rec || true
+      # lpilogue-db 컨테이너가 이미 실행 중인 경우 중지 및 제거
+      - name: Stop lpilogue-db
+        run: docker stop lpilogue-db || true && docker rm lpilogue-db || true
       # lpilogue-fe 컨테이너가 이미 실행 중인 경우 중지 및 제거
       - name: Stop lpilogue-fe
         run: docker stop lpilogue-fe || true && docker rm lpilogue-fe || true
 
       # react-app만 다시 실행
       - name: Run Docker compose
-        run: docker compose rm -f react-app && docker compose up -d --no-deps react-app
+        run: docker compose rm -f react-app && docker compose up -d react-app
