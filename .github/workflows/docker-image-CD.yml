@@ -44,7 +44,31 @@ jobs:
       # lpilogue-fe 컨테이너가 이미 실행 중인 경우 중지 및 제거
       - name: Stop lpilogue-fe
         run: docker stop lpilogue-fe || true && docker rm lpilogue-fe || true
-
+      # cloudflare 컨테이너가 이미 실행 중인 경우 중지 및 제거
+      - name: Stop cloudflare
+        run: docker stop cloudflare || true && docker rm cloudflare || true
       # react-app만 다시 실행
       - name: Run Docker compose
-        run: docker compose rm -f react-app && docker compose up -d react-app
+        env:
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          FILE_SERVER_URL: ${{ secrets.FILE_SERVER_URL }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          ROOT_PASSWORD: ${{ secrets.ROOT_PASSWORD }}
+        run: |
+          echo "DB_USER=$DB_USER" >> .env
+          echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+          echo "DB_HOST=$DB_HOST" >> .env
+          echo "DB_NAME=$DB_NAME" >> .env
+          echo "FILE_SERVER_URL=FILE_SERVER_URL" >> .env
+          echo "GOOGLE_API_KEY=$GOOGLE_API_KEY" >> .env
+          echo "SPOTIFY_CLIENT_ID=$SPOTIFY_CLIENT_ID" >> .env
+          echo "SPOTIFY_CLIENT_SECRET=$SPOTIFY_CLIENT_SECRET" >> .env
+          echo "YOUTUBE_API_KEY=$YOUTUBE_API_KEY" >> .env
+          echo "ROOT_PASSWORD=$ROOT_PASSWORD" >> .env
+          docker compose rm -f react-app && docker compose up -d react-app
