@@ -1,138 +1,93 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import monthlyDiary from '../mockData/diary';
 
 const Container = styled.div`
   width: 390px;
   margin: 0 auto;
-  padding-top: 20px;
-  color: #333;
-  min-height: 100vh;
-`;
-
-const Title = styled.div`
-  font-size: 28px;
-  margin: 0;
-`;
-
-const Subtitle = styled.div`
-  margin-bottom: 15px;
-  color: #555;
-`;
-
-const Navigation = styled.div`
+  padding: 40px 30px 30px 30px;
+  height: 100vh;
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-
-  button {
-    background: #56b7c4;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    color: white;
-    cursor: pointer;
-
-    &:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-  }
+  flex-direction: column;
+  box-sizing: border-box;
 `;
 
-const Grid = styled.div`
+const Title = styled.h1`
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #333;
+`;
+
+const ButtonGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+  margin-bottom: 60px;
 `;
 
-const Card = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+const MenuButton = styled.button`
   background: white;
-  border-radius: 10px;
-  padding: 10px 10px 0 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 15px;
+  padding: 35px 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  height: fit-content;
 
-  img {
-    width: 100%;
-    border-radius: 5px;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   }
 
-  p {
-    margin: 10px 0;
+  &:active {
+    transform: translateY(0);
   }
+`;
+
+const BottomSection = styled.div`
+  padding-top: 20px;
+  flex-shrink: 0;
+`;
+
+const SubText = styled.p`
+  font-size: 16px;
+  margin-top: 4px;
+  maring-left: 35px;
 `;
 
 const Mypage = () => {
-  const today = new Date();
-  // eslint-disable-next-line no-unused-vars
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
-
   const navigate = useNavigate();
 
-  // 현재 월에 해당하는 일기 데이터 필터링
-  const filteredDiary = monthlyDiary.filter((entry) => {
-    const entryDate = new Date(entry.createdAt);
-    return (
-      entryDate.getFullYear() === currentYear &&
-      entryDate.getMonth() + 1 === currentMonth
-    );
-  });
+  const handleDiaryClick = () => {
+    navigate('/mypage/monthly'); // 기존 Mypage 컴포넌트로 이동
+  };
 
-  const handleCardClick = (entry) => {
-    const entryDate = new Date(entry.createdAt);
-    const formattedDate = `${entryDate.getFullYear()}-${String(
-      entryDate.getMonth() + 1,
-    ).padStart(2, '0')}-${String(entryDate.getDate()).padStart(2, '0')}`;
-
-    navigate(`/diary/${formattedDate}`); // 동적 라우트로 이동
+  const handleProfileClick = () => {
+    navigate('/signup/profile'); // 기존 Mypage 컴포넌트로 이동
   };
 
   return (
     <Container>
-      <Title>
-        {currentYear}년 {currentMonth}월
-      </Title>
-      <Subtitle>닉네임님이 기록한 노래들이에요.</Subtitle>
+      <Title>닉네임님</Title>
 
-      <Navigation>
-        <button
-          type="button"
-          onClick={() => setCurrentMonth((prev) => (prev > 1 ? prev - 1 : 12))}
-        >
-          이전 달
-        </button>
-        <button
-          type="button"
-          onClick={() => setCurrentMonth((prev) => (prev < 12 ? prev + 1 : 1))}
-          disabled={
-            currentYear === today.getFullYear() &&
-            currentMonth >= today.getMonth() + 1
-          }
-        >
-          다음 달
-        </button>
-      </Navigation>
+      <ButtonGrid>
+        <MenuButton onClick={handleDiaryClick}>일기 보기</MenuButton>
+        <MenuButton onClick={handleProfileClick}>프로필 수정</MenuButton>
+      </ButtonGrid>
 
-      <Grid>
-        {filteredDiary.map((diaryEntry) => {
-          const entryDate = new Date(diaryEntry.createdAt);
-          const formattedDate = `${entryDate.getMonth() + 1}월 ${entryDate.getDate()}일`;
-
-          return (
-            <Card onClick={() => handleCardClick(diaryEntry)}>
-              <img src={diaryEntry.songFilePath} alt={diaryEntry.songName} />
-              <p>{formattedDate}</p>
-            </Card>
-          );
-        })}
-      </Grid>
+      <BottomSection>
+        <SubText>로그아웃</SubText>
+        <SubText>회원탈퇴</SubText>
+      </BottomSection>
     </Container>
   );
 };

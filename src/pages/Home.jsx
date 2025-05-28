@@ -142,11 +142,11 @@ const Home = () => {
   ];
 
   const handleWriteClick = () => {
-    navigate('/todayprofile');
+    navigate('/onboarding/today');
   };
 
   const handleUserIconClick = () => {
-    navigate('/mymain');
+    navigate('/mypage');
   };
 
   return (
