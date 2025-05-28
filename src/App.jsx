@@ -16,6 +16,7 @@ import Voice from './pages/Voice';
 import Onboarding from './pages/Onboarding';
 import Todayprofile from './pages/Todayprofile';
 import Monthly from './pages/Monthly';
+import Recap from './pages/Recap';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
       <Route path="/recommend/result" element={<Result />} />
       <Route path="/chat" element={<Chat />} />
       <Route path="/mypage" element={<Mypage />} />
+      <Route path="/mypage/recap" element={<Recap />} />
       <Route path="/mypage/monthly" element={<Monthly />} />
       <Route path="/diary/:diaryDate" element={<Details />} />
       <Route path="/voice" element={<Voice />} />

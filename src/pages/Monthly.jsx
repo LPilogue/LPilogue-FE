@@ -25,6 +25,7 @@ const Navigation = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+  margin-top: 10px;
 
   button {
     background: #56b7c4;
@@ -47,20 +48,69 @@ const Grid = styled.div`
   gap: 20px;
 `;
 
+const RecapCard = styled.div`
+  background: #fbf7ec;
+  border-radius: 20px;
+  padding: 0px 25px;
+  margin: 30px 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const CardContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const CardTitle = styled.div`
+  font-size: 20px;
+  margin: 0;
+`;
+
+const CardSubtitle = styled.p`
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+`;
+
+const CardIcon = styled.div`
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+`;
+
 const Card = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background: white;
   border-radius: 10px;
-  padding: 10px 10px 0 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 
   img {
     width: 100%;
-    border-radius: 5px;
+    border-radius: 20px;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
   }
 
   p {
@@ -99,7 +149,6 @@ const Monthly = () => {
       <Title>
         {currentYear}년 {currentMonth}월
       </Title>
-      <Subtitle>닉네임님이 기록한 노래들이에요.</Subtitle>
 
       <Navigation>
         <button
@@ -119,6 +168,16 @@ const Monthly = () => {
           다음 달
         </button>
       </Navigation>
+
+      <RecapCard>
+        <CardContent>
+          <CardTitle>가장 많이 느낀 감정</CardTitle>
+          <CardSubtitle>울음 5회</CardSubtitle>
+        </CardContent>
+        <CardIcon>😭</CardIcon>
+      </RecapCard>
+
+      <Subtitle>닉네임님이 기록한 노래들이에요.</Subtitle>
 
       <Grid>
         {filteredDiary.map((diaryEntry) => {
