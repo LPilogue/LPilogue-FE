@@ -48,6 +48,8 @@ const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nickname, setNickname] = useState('');
   const [hasNickname, setHasNickname] = useState(false);
+  const [city, setCity] = useState('');
+  const [hasCity, setHasCity] = useState(false);
 
   const navigate = useNavigate();
 
@@ -88,6 +90,23 @@ const Profile = () => {
           </InputWrapper>
           <NextButton type="half" onClick={() => setIsModalOpen(true)}>
             좋아!🥰
+          </NextButton>
+        </>
+      ) : !hasCity ? (
+        <>
+          <InputWrapper>
+            <Title>
+              {nickname}님이 계신 곳의 <br />
+              날씨에 따라 노래를 추천해드릴게요!
+            </Title>
+            <Input
+              placeholder="도시를 입력해주세요."
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+          </InputWrapper>
+          <NextButton type="half" onClick={() => setHasCity(true)}>
+            알겠어
           </NextButton>
         </>
       ) : (
