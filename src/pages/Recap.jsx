@@ -2,6 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import styled from 'styled-components';
+import sad from '../assets/images/sad.svg'
+import joy from '../assets/images/joy.svg'
+import complaint from '../assets/images/complaint.svg'
+import angry from '../assets/images/angry.svg'
+import confusion from '../assets/images/confusion.svg'
 
 const Container = styled.div`
   width: 390px;
@@ -88,7 +93,9 @@ const Recap = () => {
           <CardTitle>가장 많이 느낀 감정</CardTitle>
           <CardSubtitle>울음 5회</CardSubtitle>
         </CardContent>
-        <CardIcon>😭</CardIcon>
+        <CardIcon>
+          <img src={sad} alt='sad' ></img>
+        </CardIcon>
       </RecapCard>
 
       <RecapCard>
@@ -100,7 +107,6 @@ const Recap = () => {
           <img
             src="https://via.placeholder.com/60x60/4285f4/ffffff?text=DAY6"
             alt="DAY6"
-            style={{ width: '100px', height: '100px', borderRadius: '50%' }}
           />
         </CardIcon>
       </RecapCard>
@@ -114,7 +120,6 @@ const Recap = () => {
           <img
             src="https://via.placeholder.com/60x60/333333/ffffff?text=♪"
             alt="Zombie"
-            style={{ width: '100px', height: '100px', borderRadius: '50%' }}
           />
         </CardIcon>
       </RecapCard>

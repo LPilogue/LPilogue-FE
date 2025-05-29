@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import monthlyDiary from '../mockData/diary';
+import sad from '../assets/images/sad.svg'
+import joy from '../assets/images/joy.svg'
+import complaint from '../assets/images/complaint.svg'
+import angry from '../assets/images/angry.svg'
+import confusion from '../assets/images/confusion.svg'
 
 const Container = styled.div`
   width: 390px;
@@ -77,9 +82,10 @@ const CardSubtitle = styled.p`
 `;
 
 const CardIcon = styled.div`
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
+  margin: 20px 0px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,7 +180,9 @@ const Monthly = () => {
           <CardTitle>가장 많이 느낀 감정</CardTitle>
           <CardSubtitle>울음 5회</CardSubtitle>
         </CardContent>
-        <CardIcon>😭</CardIcon>
+        <CardIcon>
+          <img src={sad} alt="sad"></img>
+        </CardIcon>
       </RecapCard>
 
       <Subtitle>닉네임님이 기록한 노래들이에요.</Subtitle>
