@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: '/api',
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
@@ -35,7 +33,7 @@ api.interceptors.response.use(
       originalRequest.retry = true;
       try {
         const res = await axios.post(
-          `${BASE_URL}/reissue`,
+          `/reissue`,
           {},
           {
             withCredentials: true,
@@ -59,5 +57,14 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+// 토큰 없이 사용하는 API(회원가입)
+export const publicApi = axios.create({
+  baseURL: '/api',
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 export default api;
