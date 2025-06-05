@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -55,6 +56,8 @@ const Invalid = styled.div`
 `;
 
 const Signup = () => {
+  const navigate = useNavigate();
+
   const [userData, setUserData] = useState({
     username: '',
     password: '',
@@ -66,10 +69,9 @@ const Signup = () => {
     lonely: 1,
     artist: '',
   });
-
   const [idStatus, setIdStatus] = useState('idle'); // 'idle' | 'valid' | 'invalid'
-  const [idValid, setIdValid] = useState(true);
-  const [pwValid, setPwValid] = useState(true);
+  const [idValid, setIdValid] = useState(undefined);
+  const [pwValid, setPwValid] = useState(undefined);
 
   const handleChange = (field) => (e) => {
     const { value } = e.target;
@@ -106,12 +108,25 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = () => {
-    if (!idValid || !pwValid) {
+  const handleSubmit = async () => {
+    if (idValid === false || pwValid === false) {
       alert('입력값을 확인해주세요.');
       return;
     }
-    signUp(userData);
+
+    try {
+      const res = await signUp(userData);
+      console.log('응답 확인:', res);
+
+      if (res?.isSuccess) {
+        navigate('/signup/profile');
+      } else {
+        alert(res.message || '회원가입에 실패했습니다.');
+      }
+    } catch (err) {
+      console.error('회원가입 실패:', err);
+      alert('회원가입 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -129,7 +144,9 @@ const Signup = () => {
       <Block>
         <LabelWrapper>
           <Label>ID</Label>
-          {!idValid && <Invalid>아이디 형식이 올바르지 않습니다.</Invalid>}
+          {idValid === false && (
+            <Invalid>아이디 형식이 올바르지 않습니다.</Invalid>
+          )}
         </LabelWrapper>
         <Input
           placeholder="영문 대소문자 / 숫자 6자 이내"
@@ -153,7 +170,9 @@ const Signup = () => {
       <Block>
         <LabelWrapper>
           <Label>PW</Label>
-          {!pwValid && <Invalid>비밀번호 형식이 올바르지 않습니다.</Invalid>}
+          {pwValid === false && (
+            <Invalid>비밀번호 형식이 올바르지 않습니다.</Invalid>
+          )}
         </LabelWrapper>
         <Input
           placeholder="영문 대소문자 / 숫자 / 특수문자 8자 이상"
