@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -53,21 +54,27 @@ const Invalid = styled.div`
 `;
 
 const Signup = () => {
-  const idStatus = 'invalid';
-  const idValid = false;
-  const pwValid = false;
+  const [userData, setUserData] = useState({
+    username: '',
+    password: '',
+    // TOOD: 아래의 값은 별도의 api로 분리될 예정
+    nickname: '',
+    city: '',
+    happy: 1,
+    sad: 0,
+    stressed: 1,
+    lonely: 1,
+    artist: '',
+  });
 
-  // 임시 회원정보
-  const userData = {
-    username: 'test',
-    password: 'password!123',
-    nickname: '박예진',
-    city: 'Seoul',
-    happy: 1, // 1: 신나는 업템포 음악
-    sad: 0, // 0: 기분을 바꿔줄 밝은 음악
-    stressed: 1, // 1: 강렬한 비트 음악
-    lonely: 1, // 1: 감성적인 가사 음악
-    artist: '아이유', // 좋아하는 아티스트
+  console.log(userData);
+
+  const [idStatus, setIdStatus] = useState('idle');
+  const [idValid, setIdValid] = useState('valid');
+  const [pwValid, setPwValid] = useState('valid');
+
+  const handleChange = (field) => (e) => {
+    setUserData((prev) => ({ ...prev, [field]: e.target.value }));
   };
 
   return (
@@ -85,7 +92,11 @@ const Signup = () => {
           <Label>ID</Label>
           {!idValid && <Invalid>아이디 형식이 올바르지 않습니다.</Invalid>}
         </LabelWrapper>
-        <Input placeholder="영문 대소문자 / 숫자 6자 이내" />
+        <Input
+          placeholder="영문 대소문자 / 숫자 6자 이내"
+          value={userData.username}
+          onChange={handleChange('username')}
+        />
         {idStatus === 'idle' && (
           <Duplication status="idle">아이디 중복 확인</Duplication>
         )}
@@ -104,6 +115,8 @@ const Signup = () => {
         <Input
           placeholder="영문 대소문자 / 숫자 / 특수문자 8자 이내"
           type="password"
+          value={userData.password}
+          onChange={handleChange('password')}
         />
       </Block>
     </Container>
