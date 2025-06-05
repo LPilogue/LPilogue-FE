@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -24,20 +25,25 @@ const Label = styled.div`
 `;
 
 const Login = () => {
+  const navigate = useNavigate();
   return (
     <Container>
       <Block>
         <Label>ID</Label>
-        <Input placeholder="영문 대소문자 / 숫자 6자 이내" />
+        <Input placeholder="아이디를 입력하세요." />
       </Block>
       <Block>
         <Label>PW</Label>
-        <Input
-          placeholder="영문 대소문자 / 숫자 / 특수문자 8자 이내"
-          type="password"
-        />
+        <Input placeholder="비밀번호를 입력하세요." type="password" />
       </Block>
-      <Button type="full">로그인</Button>
+      <Button
+        type="full"
+        onClick={() => {
+          navigate('/home');
+        }}
+      >
+        로그인
+      </Button>
     </Container>
   );
 };
