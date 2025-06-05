@@ -1,7 +1,10 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import signUp from '../api/auth/signup';
+import duplicateId from '../api/auth/duplicateId';
 
 const Container = styled.div`
   display: flex;
@@ -53,21 +56,82 @@ const Invalid = styled.div`
 `;
 
 const Signup = () => {
-  const idStatus = 'invalid';
-  const idValid = false;
-  const pwValid = false;
+  const navigate = useNavigate();
 
-  // 임시 회원정보
-  const userData = {
-    username: 'test',
-    password: 'password!123',
-    nickname: '박예진',
-    city: 'Seoul',
-    happy: 1, // 1: 신나는 업템포 음악
-    sad: 0, // 0: 기분을 바꿔줄 밝은 음악
-    stressed: 1, // 1: 강렬한 비트 음악
-    lonely: 1, // 1: 감성적인 가사 음악
-    artist: '아이유', // 좋아하는 아티스트
+  const [userData, setUserData] = useState({
+    username: '',
+    password: '',
+    nickname: '',
+    city: '',
+    happy: 1,
+    sad: 0,
+    stressed: 1,
+    lonely: 1,
+    artist: '',
+  });
+  const [idStatus, setIdStatus] = useState('idle'); // 'idle' | 'valid' | 'invalid'
+  const [idValid, setIdValid] = useState(undefined);
+  const [pwValid, setPwValid] = useState(undefined);
+
+  const handleChange = (field) => (e) => {
+    const { value } = e.target;
+    setUserData((prev) => ({ ...prev, [field]: value }));
+
+    const validateUsername = (username) => {
+      const idRegex = /^[A-Za-z0-9]{1,6}$/;
+      setIdValid(idRegex.test(username));
+    };
+
+    const validatePassword = (password) => {
+      const pwRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{8,}$/;
+      setPwValid(pwRegex.test(password));
+    };
+
+    if (field === 'username') {
+      validateUsername(value);
+      setIdStatus('idle'); // 아이디 입력 시 중복 상태 초기화
+    } else if (field === 'password') {
+      validatePassword(value);
+    }
+  };
+
+  const handleCheckDuplication = async () => {
+    if (!idValid) return;
+
+    try {
+      const isDuplicated = await duplicateId(userData.username);
+      setIdStatus(isDuplicated ? 'invalid' : 'valid');
+    } catch (e) {
+      console.error('중복 확인 오류:', e);
+      setIdStatus('invalid');
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!idValid || !pwValid) {
+      alert('입력값을 확인해주세요.');
+      return;
+    }
+
+    if (idStatus !== 'valid') {
+      alert('아이디 중복 확인을 해주세요.');
+      return;
+    }
+
+    try {
+      const res = await signUp(userData);
+      console.log('응답 확인:', res);
+
+      if (res?.isSuccess) {
+        navigate('/signup/profile');
+      } else {
+        alert(res.message || '회원가입에 실패했습니다.');
+      }
+    } catch (err) {
+      console.error('회원가입 실패:', err);
+      alert('회원가입 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -75,19 +139,29 @@ const Signup = () => {
       <Button
         type="header"
         onClick={() => {
-          signUp(userData);
+          handleSubmit();
         }}
       >
         완료
       </Button>
+
+      {/* ID 입력 */}
       <Block>
         <LabelWrapper>
           <Label>ID</Label>
-          {!idValid && <Invalid>아이디 형식이 올바르지 않습니다.</Invalid>}
+          {idValid === false && (
+            <Invalid>아이디 형식이 올바르지 않습니다.</Invalid>
+          )}
         </LabelWrapper>
-        <Input placeholder="영문 대소문자 / 숫자 6자 이내" />
+        <Input
+          placeholder="영문 대소문자 / 숫자 6자 이내"
+          value={userData.username}
+          onChange={handleChange('username')}
+        />
         {idStatus === 'idle' && (
-          <Duplication status="idle">아이디 중복 확인</Duplication>
+          <Duplication status="idle" onClick={handleCheckDuplication}>
+            아이디 중복 확인
+          </Duplication>
         )}
         {idStatus === 'valid' && (
           <Duplication status="valid">사용 가능한 아이디입니다.</Duplication>
@@ -96,14 +170,20 @@ const Signup = () => {
           <Duplication status="invalid">이미 가입된 아이디입니다.</Duplication>
         )}
       </Block>
+
+      {/* PW 입력 */}
       <Block>
         <LabelWrapper>
           <Label>PW</Label>
-          {!pwValid && <Invalid>비밀번호 형식이 올바르지 않습니다.</Invalid>}
+          {pwValid === false && (
+            <Invalid>비밀번호 형식이 올바르지 않습니다.</Invalid>
+          )}
         </LabelWrapper>
         <Input
-          placeholder="영문 대소문자 / 숫자 / 특수문자 8자 이내"
+          placeholder="영문 대소문자 / 숫자 / 특수문자 8자 이상"
           type="password"
+          value={userData.password}
+          onChange={handleChange('password')}
         />
       </Block>
     </Container>
