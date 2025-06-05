@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import signUp from '../api/auth/signup';
 
 const Container = styled.div`
   display: flex;
@@ -56,9 +57,29 @@ const Signup = () => {
   const idValid = false;
   const pwValid = false;
 
+  // 임시 회원정보
+  const userData = {
+    username: 'test',
+    password: 'password!123',
+    nickname: '박예진',
+    city: 'Seoul',
+    happy: 1, // 1: 신나는 업템포 음악
+    sad: 0, // 0: 기분을 바꿔줄 밝은 음악
+    stressed: 1, // 1: 강렬한 비트 음악
+    lonely: 1, // 1: 감성적인 가사 음악
+    artist: '아이유', // 좋아하는 아티스트
+  };
+
   return (
     <Container>
-      <Button type="header">완료</Button>
+      <Button
+        type="header"
+        onClick={() => {
+          signUp(userData);
+        }}
+      >
+        완료
+      </Button>
       <Block>
         <LabelWrapper>
           <Label>ID</Label>
