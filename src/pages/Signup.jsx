@@ -57,7 +57,6 @@ const Signup = () => {
   const [userData, setUserData] = useState({
     username: '',
     password: '',
-    // TOOD: 아래의 값은 별도의 api로 분리될 예정
     nickname: '',
     city: '',
     happy: 1,
@@ -67,26 +66,48 @@ const Signup = () => {
     artist: '',
   });
 
-  console.log(userData);
-
-  const [idStatus, setIdStatus] = useState('idle');
-  const [idValid, setIdValid] = useState('valid');
-  const [pwValid, setPwValid] = useState('valid');
+  const [idStatus, setIdStatus] = useState('idle'); // 'idle' | 'valid' | 'invalid'
+  const [idValid, setIdValid] = useState(true);
+  const [pwValid, setPwValid] = useState(true);
 
   const handleChange = (field) => (e) => {
-    setUserData((prev) => ({ ...prev, [field]: e.target.value }));
+    const { value } = e.target;
+    setUserData((prev) => ({ ...prev, [field]: value }));
+
+    const validateUsername = (username) => {
+      const idRegex = /^[A-Za-z0-9]{1,6}$/;
+      setIdValid(idRegex.test(username));
+    };
+
+    const validatePassword = (password) => {
+      const pwRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{8,}$/;
+      setPwValid(pwRegex.test(password));
+    };
+
+    if (field === 'username') {
+      validateUsername(value);
+      setIdStatus('idle'); // 아이디 입력 시 중복 상태 초기화
+    } else if (field === 'password') {
+      validatePassword(value);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (!idValid || !pwValid) {
+      alert('입력값을 확인해주세요.');
+      return;
+    }
+    signUp(userData);
   };
 
   return (
     <Container>
-      <Button
-        type="header"
-        onClick={() => {
-          signUp(userData);
-        }}
-      >
+      <Button type="header" onClick={handleSubmit}>
         완료
       </Button>
+
+      {/* ID 입력 */}
       <Block>
         <LabelWrapper>
           <Label>ID</Label>
@@ -107,13 +128,15 @@ const Signup = () => {
           <Duplication status="invalid">이미 가입된 아이디입니다.</Duplication>
         )}
       </Block>
+
+      {/* PW 입력 */}
       <Block>
         <LabelWrapper>
           <Label>PW</Label>
           {!pwValid && <Invalid>비밀번호 형식이 올바르지 않습니다.</Invalid>}
         </LabelWrapper>
         <Input
-          placeholder="영문 대소문자 / 숫자 / 특수문자 8자 이내"
+          placeholder="영문 대소문자 / 숫자 / 특수문자 8자 이상"
           type="password"
           value={userData.password}
           onChange={handleChange('password')}
