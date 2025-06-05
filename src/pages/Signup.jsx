@@ -109,8 +109,13 @@ const Signup = () => {
   };
 
   const handleSubmit = async () => {
-    if (idValid === false || pwValid === false) {
+    if (!idValid || !pwValid) {
       alert('입력값을 확인해주세요.');
+      return;
+    }
+
+    if (idStatus !== 'valid') {
+      alert('아이디 중복 확인을 해주세요.');
       return;
     }
 
