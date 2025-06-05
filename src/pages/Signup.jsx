@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import signUp from '../api/auth/signup';
+import duplicateId from '../api/auth/duplicateId';
 
 const Container = styled.div`
   display: flex;
@@ -93,6 +94,18 @@ const Signup = () => {
     }
   };
 
+  const handleCheckDuplication = async () => {
+    if (!idValid) return;
+
+    try {
+      const isDuplicated = await duplicateId(userData.username);
+      setIdStatus(isDuplicated ? 'invalid' : 'valid');
+    } catch (e) {
+      console.error('중복 확인 오류:', e);
+      setIdStatus('invalid');
+    }
+  };
+
   const handleSubmit = () => {
     if (!idValid || !pwValid) {
       alert('입력값을 확인해주세요.');
@@ -103,7 +116,12 @@ const Signup = () => {
 
   return (
     <Container>
-      <Button type="header" onClick={handleSubmit}>
+      <Button
+        type="header"
+        onClick={() => {
+          handleSubmit();
+        }}
+      >
         완료
       </Button>
 
@@ -119,7 +137,9 @@ const Signup = () => {
           onChange={handleChange('username')}
         />
         {idStatus === 'idle' && (
-          <Duplication status="idle">아이디 중복 확인</Duplication>
+          <Duplication status="idle" onClick={handleCheckDuplication}>
+            아이디 중복 확인
+          </Duplication>
         )}
         {idStatus === 'valid' && (
           <Duplication status="valid">사용 가능한 아이디입니다.</Duplication>
