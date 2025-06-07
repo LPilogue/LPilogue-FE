@@ -1,12 +1,7 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Button from '../components/Button';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import sad from '../assets/images/sad.svg'
-import joy from '../assets/images/joy.svg'
-import complaint from '../assets/images/complaint.svg'
-import angry from '../assets/images/angry.svg'
-import confusion from '../assets/images/confusion.svg'
+import RecapCard from '../components/RecapCard';
+import { getMostEmotionYearly } from '../api/diary/getMostEmotion';
 
 const Container = styled.div`
   width: 390px;
@@ -24,7 +19,7 @@ const Title = styled.h1`
   margin-bottom: 40px;
 `;
 
-const RecapCard = styled.div`
+const StyledCard = styled.div`
   background: #fbf7ec;
   border-radius: 20px;
   padding: 25px;
@@ -33,18 +28,6 @@ const RecapCard = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
 `;
 
 const CardContent = styled.div`
@@ -55,13 +38,11 @@ const CardContent = styled.div`
 
 const CardTitle = styled.div`
   font-size: 20px;
-  margin: 0;
 `;
 
 const CardSubtitle = styled.p`
   font-size: 16px;
   font-weight: 600;
-  margin: 0;
 `;
 
 const CardIcon = styled.div`
@@ -71,8 +52,6 @@ const CardIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 50px;
-  flex-shrink: 0;
   overflow: hidden;
 
   img {
@@ -84,21 +63,31 @@ const CardIcon = styled.div`
 `;
 
 const Recap = () => {
+  const [emotionData, setEmotionData] = useState(null);
+  const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    const fetchEmotion = async () => {
+      try {
+        const res = await getMostEmotionYearly(currentYear);
+        if (res.isSuccess) {
+          setEmotionData(res.result);
+        }
+      } catch (err) {
+        console.error('감정 조회 실패:', err);
+      }
+    };
+
+    fetchEmotion();
+  }, [currentYear]);
+
   return (
     <Container>
-      <Title>Recap of {2025}</Title>
+      <Title>Recap of {currentYear}</Title>
 
-      <RecapCard>
-        <CardContent>
-          <CardTitle>가장 많이 느낀 감정</CardTitle>
-          <CardSubtitle>울음 5회</CardSubtitle>
-        </CardContent>
-        <CardIcon>
-          <img src={sad} alt='sad' ></img>
-        </CardIcon>
-      </RecapCard>
+      <RecapCard emotionData={emotionData} />
 
-      <RecapCard>
+      <StyledCard>
         <CardContent>
           <CardTitle>가장 많이 기록한 아티스트</CardTitle>
           <CardSubtitle>DAY6 5회</CardSubtitle>
@@ -109,9 +98,9 @@ const Recap = () => {
             alt="DAY6"
           />
         </CardIcon>
-      </RecapCard>
+      </StyledCard>
 
-      <RecapCard>
+      <StyledCard>
         <CardContent>
           <CardTitle>가장 많이 기록한 노래</CardTitle>
           <CardSubtitle>Zombie 6회</CardSubtitle>
@@ -122,7 +111,7 @@ const Recap = () => {
             alt="Zombie"
           />
         </CardIcon>
-      </RecapCard>
+      </StyledCard>
     </Container>
   );
 };

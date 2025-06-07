@@ -22,6 +22,7 @@ const StyledCard = styled.div`
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const CardContent = styled.div`
