@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import monthlyDiary from '../mockData/diary';
-import sad from '../assets/images/sad.svg'
-import joy from '../assets/images/joy.svg'
-import complaint from '../assets/images/complaint.svg'
-import angry from '../assets/images/angry.svg'
-import confusion from '../assets/images/confusion.svg'
+import sad from '../assets/images/sad.svg';
+import getMonthlyDiary from '../api/diary/getMontlyDiary';
+// import joy from '../assets/images/joy.svg'
+// import complaint from '../assets/images/complaint.svg'
+// import angry from '../assets/images/angry.svg'
+// import confusion from '../assets/images/confusion.svg'
 
 const Container = styled.div`
   width: 390px;
@@ -126,20 +126,24 @@ const Card = styled.div`
 
 const Monthly = () => {
   const today = new Date();
-  // eslint-disable-next-line no-unused-vars
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
+  const [monthlyDiary, setMonthlyDiary] = useState([]);
 
   const navigate = useNavigate();
 
-  // 현재 월에 해당하는 일기 데이터 필터링
-  const filteredDiary = monthlyDiary.filter((entry) => {
-    const entryDate = new Date(entry.createdAt);
-    return (
-      entryDate.getFullYear() === currentYear &&
-      entryDate.getMonth() + 1 === currentMonth
-    );
-  });
+  const fetchDiaryData = async (year, month) => {
+    try {
+      const res = await getMonthlyDiary(year, month);
+      setMonthlyDiary(res.result.diaryPreviewList);
+    } catch (error) {
+      console.error('월간 일기 불러오기 실패:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDiaryData(currentYear, currentMonth);
+  }, [currentYear, currentMonth]);
 
   const handleCardClick = (entry) => {
     const entryDate = new Date(entry.createdAt);
@@ -147,7 +151,7 @@ const Monthly = () => {
       entryDate.getMonth() + 1,
     ).padStart(2, '0')}-${String(entryDate.getDate()).padStart(2, '0')}`;
 
-    navigate(`/diary/${formattedDate}`); // 동적 라우트로 이동
+    navigate(`/diary/${formattedDate}`);
   };
 
   return (
@@ -181,20 +185,20 @@ const Monthly = () => {
           <CardSubtitle>울음 5회</CardSubtitle>
         </CardContent>
         <CardIcon>
-          <img src={sad} alt="sad"></img>
+          <img src={sad} alt="sad" />
         </CardIcon>
       </RecapCard>
 
       <Subtitle>닉네임님이 기록한 노래들이에요.</Subtitle>
 
       <Grid>
-        {filteredDiary.map((diaryEntry) => {
-          const entryDate = new Date(diaryEntry.createdAt);
+        {monthlyDiary.map((entry) => {
+          const entryDate = new Date(entry.createdAt);
           const formattedDate = `${entryDate.getMonth() + 1}월 ${entryDate.getDate()}일`;
 
           return (
-            <Card onClick={() => handleCardClick(diaryEntry)}>
-              <img src={diaryEntry.songFilePath} alt={diaryEntry.songName} />
+            <Card key={entry.createdAt} onClick={() => handleCardClick(entry)}>
+              <img src={entry.songImagePath} alt="노래 이미지" />
               <p>{formattedDate}</p>
             </Card>
           );
