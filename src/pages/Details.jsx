@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import getDiaryDetail from '../api/diary/getDiaryDetail';
 
 const Container = styled.div`
   width: 390px;
@@ -68,27 +70,41 @@ const DeleteButton = styled.button`
 
 const DetailPage = () => {
   const navigate = useNavigate();
-
-  const diary = {
-    createdAt: '2025-06-07T12:37:46.036Z',
-    content: '오늘은 기분이 좋아서 산책을 나갔다. 바람이 참 기분 좋았다.',
-    songName: '한 페이지가 될 수 있게',
-    songURI: 'https://open.spotify.com/track/mockURI',
-    artist: 'DAY6',
-    songImagePath:
-      'https://image.bugsm.co.kr/album/images/200/202657/20265759.jpg?version=20211119004415',
-    cocktailName: 'Mojito',
-    cocktailImagePath: 'https://example.com/cocktail-image.jpg',
-  };
+  const { diaryId } = useParams(); // URL에서 diaryId 추출
+  const [diary, setDiary] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const handleBack = () => {
     navigate(-1);
   };
 
   const handleDelete = () => {
-    // TODO: 일기 삭제 api 요청하도록 수정
     alert('일기가 삭제되었습니다.');
+    // TODO: 삭제 API 연동
   };
+
+  useEffect(() => {
+    const fetchDiary = async () => {
+      try {
+        const response = await getDiaryDetail(diaryId);
+        if (response.isSuccess) {
+          setDiary(response.result);
+        } else {
+          console.warn('일기 조회 실패:', response.message);
+        }
+      } catch (error) {
+        console.error('에러:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDiary();
+  }, [diaryId]);
+
+  if (loading) {
+    return <Container>불러오는 중...</Container>;
+  }
 
   if (!diary) {
     return <Container>해당 날짜의 일기를 찾을 수 없습니다.</Container>;

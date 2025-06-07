@@ -132,8 +132,6 @@ const Monthly = () => {
   const [monthlyDiary, setMonthlyDiary] = useState([]);
   const navigate = useNavigate();
 
-  const diaryId = 8;
-
   const fetchDiaryData = async (year, month) => {
     try {
       const res = await getMonthlyDiary(year, month);
@@ -193,7 +191,7 @@ const Monthly = () => {
           return (
             <Card
               key={entry.createdAt}
-              onClick={() => navigate(`/diary/${diaryId}`)}
+              onClick={() => navigate(`/diary/${entry.diaryId}`)}
             >
               <img src={entry.songImagePath} alt="노래 이미지" />
               <p>{formattedDate}</p>
