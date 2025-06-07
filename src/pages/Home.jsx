@@ -98,7 +98,7 @@ const SongInfo = styled.div`
 const FloatingButton = styled.button`
   position: fixed;
   bottom: 30px;
-  right: 40%;
+  right: 10%;
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -156,17 +156,17 @@ const Home = () => {
       </Header>
 
       <MainContent>
-        <WeatherInfo>오늘은 ({weatherInfo})</WeatherInfo>
+        <WeatherInfo>오늘은 {weatherInfo}</WeatherInfo>
         <SuggestionText>이런 날엔</SuggestionText>
         <SongRecommendation>
-          {`{${recommendedSong.artist}} - {${recommendedSong.title}}`}
+          {recommendedSong.artist} - {recommendedSong.title}
         </SongRecommendation>
-        <RecommendationMessage>음 추천드렸어요!😊</RecommendationMessage>
+        <RecommendationMessage>을 추천드릴게요!😊</RecommendationMessage>
       </MainContent>
 
       <PopularSection>
         <PopularTitle>
-          오늘 LP/플로그 유저들이
+          오늘 LPilogue 유저들이
           <br />
           많이 기록한 노래예요.
         </PopularTitle>
