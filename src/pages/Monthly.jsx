@@ -130,13 +130,15 @@ const Monthly = () => {
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
   const [monthlyDiary, setMonthlyDiary] = useState([]);
-
   const navigate = useNavigate();
+
+  const diaryId = 8;
 
   const fetchDiaryData = async (year, month) => {
     try {
       const res = await getMonthlyDiary(year, month);
       setMonthlyDiary(res.result.diaryPreviewList);
+      // TODO: diaryId 여기서 받아오도록 수정
     } catch (error) {
       console.error('월간 일기 불러오기 실패:', error);
     }
@@ -145,15 +147,6 @@ const Monthly = () => {
   useEffect(() => {
     fetchDiaryData(currentYear, currentMonth);
   }, [currentYear, currentMonth]);
-
-  const handleCardClick = (entry) => {
-    const entryDate = new Date(entry.createdAt);
-    const formattedDate = `${entryDate.getFullYear()}-${String(
-      entryDate.getMonth() + 1,
-    ).padStart(2, '0')}-${String(entryDate.getDate()).padStart(2, '0')}`;
-
-    navigate(`/diary/${formattedDate}`);
-  };
 
   return (
     <Container>
@@ -198,7 +191,10 @@ const Monthly = () => {
           const formattedDate = `${entryDate.getMonth() + 1}월 ${entryDate.getDate()}일`;
 
           return (
-            <Card key={entry.createdAt} onClick={() => handleCardClick(entry)}>
+            <Card
+              key={entry.createdAt}
+              onClick={() => navigate(`/diary/${diaryId}`)}
+            >
               <img src={entry.songImagePath} alt="노래 이미지" />
               <p>{formattedDate}</p>
             </Card>

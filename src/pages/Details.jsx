@@ -1,7 +1,5 @@
-import React from 'react';
 import styled from 'styled-components';
-import { useNavigate, useParams } from 'react-router-dom';
-import diary from '../mockData/diary';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   width: 390px;
@@ -20,7 +18,7 @@ const Header = styled.div`
   }
 `;
 
-const Title = styled.h2`
+const BackButton = styled.h2`
   text-align: left;
   font-weight: 400;
   font-size: 30px;
@@ -69,51 +67,50 @@ const DeleteButton = styled.button`
 `;
 
 const DetailPage = () => {
-  const { diaryDate } = useParams();
   const navigate = useNavigate();
 
-  // 해당 날짜의 일기 데이터 찾기
-  const selectedDiary = diary.find((entry) => {
-    const entryDate = new Date(entry.createdAt);
-    const formattedDate = `${entryDate.getFullYear()}-${String(
-      entryDate.getMonth() + 1,
-    ).padStart(2, '0')}-${String(entryDate.getDate()).padStart(2, '0')}`;
-    return formattedDate === diaryDate;
-  });
+  const diary = {
+    createdAt: '2025-06-07T12:37:46.036Z',
+    content: '오늘은 기분이 좋아서 산책을 나갔다. 바람이 참 기분 좋았다.',
+    songName: '한 페이지가 될 수 있게',
+    songURI: 'https://open.spotify.com/track/mockURI',
+    artist: 'DAY6',
+    songImagePath:
+      'https://image.bugsm.co.kr/album/images/200/202657/20265759.jpg?version=20211119004415',
+    cocktailName: 'Mojito',
+    cocktailImagePath: 'https://example.com/cocktail-image.jpg',
+  };
 
   const handleBack = () => {
     navigate(-1);
   };
 
   const handleDelete = () => {
-    alert('일기가 삭제되었습니다.'); // 삭제 동작 (실제 삭제 로직 추가 필요)
+    // TODO: 일기 삭제 api 요청하도록 수정
+    alert('일기가 삭제되었습니다.');
   };
 
-  if (!selectedDiary) {
+  if (!diary) {
     return <Container>해당 날짜의 일기를 찾을 수 없습니다.</Container>;
   }
 
   return (
     <Container>
       <Header>
-        <Title onClick={handleBack}>
-          {`<`} {diaryDate}
-        </Title>
+        <BackButton onClick={handleBack}>{`<`}</BackButton>
         <DeleteButton onClick={handleDelete}>삭제</DeleteButton>
       </Header>
 
       <AlbumImage>
-        <img src={selectedDiary.songFilePath} alt={selectedDiary.songName} />
+        <img src={diary.songImagePath} alt={diary.songName} />
       </AlbumImage>
 
-      {/* 앨범 제목 */}
       <AlbumText>
-        {selectedDiary.songName}
-        <span>{selectedDiary.artist}</span>
+        {diary.songName}
+        <span>{diary.artist}</span>
       </AlbumText>
 
-      {/* 일기 내용 */}
-      <Content>{selectedDiary.content}</Content>
+      <Content>{diary.content}</Content>
     </Container>
   );
 };
