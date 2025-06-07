@@ -79,7 +79,7 @@ const Monthly = () => {
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
   const [monthlyDiary, setMonthlyDiary] = useState([]);
-  const [emotion, setEmotion] = useState(null);
+  const [emotionData, setEmotionData] = useState(null);
   const navigate = useNavigate();
 
   const fetchDiaryData = async (year, month) => {
@@ -95,7 +95,7 @@ const Monthly = () => {
     try {
       const res = await getMostEmotionMonthly(year, month);
       if (res.isSuccess) {
-        setEmotion(res.result);
+        setEmotionData(res.result);
       } else {
         console.warn('감정 조회 실패:', res.message);
       }
@@ -134,7 +134,7 @@ const Monthly = () => {
         </button>
       </Navigation>
 
-      <RecapCard emotion={emotion} />
+      <RecapCard emotionData={emotionData} />
       <Subtitle>닉네임님이 기록한 노래들이에요.</Subtitle>
 
       <Grid>

@@ -1,9 +1,17 @@
 import styled from 'styled-components';
 import sad from '../assets/images/sad.svg';
-// import joy from '../assets/images/joy.svg'
-// import complaint from '../assets/images/complaint.svg'
-// import angry from '../assets/images/angry.svg'
-// import confusion from '../assets/images/confusion.svg'
+import joy from '../assets/images/joy.svg';
+import complaint from '../assets/images/complaint.svg';
+import angry from '../assets/images/angry.svg';
+import confusion from '../assets/images/confusion.svg';
+
+const emotionMap = {
+  SAD: { label: '울음', icon: sad },
+  HAPPY: { label: '기쁨', icon: joy },
+  ANGRY: { label: '화남', icon: angry },
+  COMPLAINT: { label: '불만', icon: complaint },
+  CONFUSED: { label: '혼란', icon: confusion },
+};
 
 const StyledCard = styled.div`
   background: #fbf7ec;
@@ -52,15 +60,27 @@ const CardIcon = styled.div`
     border-radius: 50%;
   }
 `;
-const RecapCard = () => {
+
+const RecapCard = ({ emotionData }) => {
+  if (!emotionData) return null;
+
+  const { emotionType, count } = emotionData;
+  const emotion = emotionMap[emotionType] || { label: '기록 없음', icon: null };
+
   return (
     <StyledCard>
       <CardContent>
         <CardTitle>가장 많이 느낀 감정</CardTitle>
-        <CardSubtitle>울음 5회</CardSubtitle>
+        <CardSubtitle>
+          {emotion.label} {count}회
+        </CardSubtitle>
       </CardContent>
       <CardIcon>
-        <img src={sad} alt="sad" />
+        {emotion.icon ? (
+          <img src={emotion.icon} alt={emotion.label} />
+        ) : (
+          <span>😶</span>
+        )}
       </CardIcon>
     </StyledCard>
   );
