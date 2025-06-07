@@ -19,7 +19,7 @@ const Title = styled.div`
 `;
 
 const Subtitle = styled.div`
-  margin-bottom: 15px;
+  margin: 30px 0;
   color: #555;
 `;
 

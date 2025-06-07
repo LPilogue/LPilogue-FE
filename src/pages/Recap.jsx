@@ -11,6 +11,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  gap: 20px;
 `;
 
 const Title = styled.h1`
@@ -23,7 +24,6 @@ const StyledCard = styled.div`
   background: #fbf7ec;
   border-radius: 20px;
   padding: 25px;
-  margin-bottom: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
