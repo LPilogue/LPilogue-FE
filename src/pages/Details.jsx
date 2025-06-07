@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import getDiaryDetail from '../api/diary/getDiaryDetail';
+import deleteDiary from '../api/diary/deleteDiary';
 
 const Container = styled.div`
   width: 390px;
@@ -70,7 +71,7 @@ const DeleteButton = styled.button`
 
 const DetailPage = () => {
   const navigate = useNavigate();
-  const { diaryId } = useParams(); // URL에서 diaryId 추출
+  const { diaryId } = useParams();
   const [diary, setDiary] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -78,9 +79,20 @@ const DetailPage = () => {
     navigate(-1);
   };
 
-  const handleDelete = () => {
-    alert('일기가 삭제되었습니다.');
-    // TODO: 삭제 API 연동
+  const handleDelete = async () => {
+    if (!window.confirm('정말 이 일기를 삭제하시겠습니까?')) return;
+    try {
+      const res = await deleteDiary(diaryId);
+      if (res.isSuccess) {
+        alert('일기가 삭제되었습니다.');
+        navigate('/mypage/monthly');
+      } else {
+        alert(`삭제 실패: ${res.message}`);
+      }
+    } catch (err) {
+      alert('삭제 중 오류가 발생했습니다.');
+      console.error(err);
+    }
   };
 
   useEffect(() => {
