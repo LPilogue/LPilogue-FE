@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import getMonthlyDiary from '../api/diary/getMontlyDiary';
 import RecapCard from '../components/RecapCard';
+import getMostEmotionMonthly from '../api/diary/getMostEmotionMonthly';
 
 const Container = styled.div`
   width: 390px;
@@ -78,20 +79,34 @@ const Monthly = () => {
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
   const [monthlyDiary, setMonthlyDiary] = useState([]);
+  const [emotion, setEmotion] = useState(null);
   const navigate = useNavigate();
 
   const fetchDiaryData = async (year, month) => {
     try {
       const res = await getMonthlyDiary(year, month);
       setMonthlyDiary(res.result.diaryPreviewList);
-      // TODO: diaryId 여기서 받아오도록 수정
     } catch (error) {
       console.error('월간 일기 불러오기 실패:', error);
     }
   };
 
+  const fetchEmotionData = async (year, month) => {
+    try {
+      const res = await getMostEmotionMonthly(year, month);
+      if (res.isSuccess) {
+        setEmotion(res.result);
+      } else {
+        console.warn('감정 조회 실패:', res.message);
+      }
+    } catch (error) {
+      console.error('감정 불러오기 실패:', error);
+    }
+  };
+
   useEffect(() => {
     fetchDiaryData(currentYear, currentMonth);
+    fetchEmotionData(currentYear, currentMonth);
   }, [currentYear, currentMonth]);
 
   return (
@@ -119,7 +134,7 @@ const Monthly = () => {
         </button>
       </Navigation>
 
-      <RecapCard />
+      <RecapCard emotion={emotion} />
       <Subtitle>닉네임님이 기록한 노래들이에요.</Subtitle>
 
       <Grid>
