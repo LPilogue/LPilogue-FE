@@ -122,10 +122,11 @@ const Write = () => {
     content: text,
     songs: [
       {
-        name: 'Sample Song',
-        artist: 'Sample Artist',
-        songURI: 'https://example.com',
-        imagePath: 'https://image.com/sample.jpg',
+        name: '한 페이지가 될 수 있게',
+        artist: 'DAY6',
+        songURI: 'https://youtu.be/GWGWxKgsOgg?si=A6COjpNLAyJvYm_j',
+        imagePath:
+          'https://image.bugsm.co.kr/album/images/200/202657/20265759.jpg?version=20211119004415',
         isLiked: 0,
         type: 'MAIN',
       },

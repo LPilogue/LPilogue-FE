@@ -126,6 +126,7 @@ const Card = styled.div`
 
 const Monthly = () => {
   const today = new Date();
+  // eslint-disable-next-line no-unused-vars
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
   const [monthlyDiary, setMonthlyDiary] = useState([]);
