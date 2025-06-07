@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import sound from '../assets/images/sound.svg';
 import left from '../assets/images/leftButton.svg';
 import PositiveButton from '../components/PositiveButton';
+import createDiary from '../api/diary/createDiary';
 
 const Container = styled.div`
   display: flex;
@@ -114,15 +115,42 @@ const Write = () => {
 
   const [text, setText] = useState('');
   const [date, setDate] = useState(todayString);
-
   const navigate = useNavigate();
 
-  const handleTextChange = (event) => {
-    setText(event.target.value);
+  const mockData = {
+    createdAt: new Date(date).toISOString(),
+    content: text,
+    songs: [
+      {
+        name: '한 페이지가 될 수 있게',
+        artist: 'DAY6',
+        songURI: 'https://youtu.be/GWGWxKgsOgg?si=A6COjpNLAyJvYm_j',
+        imagePath:
+          'https://image.bugsm.co.kr/album/images/200/202657/20265759.jpg?version=20211119004415',
+        isLiked: 0,
+        type: 'MAIN',
+      },
+    ],
+    cocktailName: 'Negroni',
+    emotionType: 'HAPPY',
   };
 
-  const handleDateChange = (event) => {
-    setDate(event.target.value);
+  const handleTextChange = (event) => setText(event.target.value);
+  const handleDateChange = (event) => setDate(event.target.value);
+
+  const handleSubmit = async () => {
+    if (!date || text.trim().length === 0) {
+      alert('날짜와 내용을 모두 입력해주세요.');
+      return;
+    }
+
+    try {
+      await createDiary(mockData);
+      navigate('/chat');
+    } catch (err) {
+      console.error('다이어리 저장 실패:', err);
+      alert('다이어리 저장에 실패했습니다.');
+    }
   };
 
   return (
@@ -130,14 +158,9 @@ const Write = () => {
       <Layout>
         <Header>
           <BackButton src={left} alt="back" onClick={() => navigate(-1)} />
-          <PositiveButton
-            onClick={() => {
-              if (date && text.length > 0) {
-                navigate('/chat');
-              }
-            }}
-          />
+          <PositiveButton onClick={handleSubmit} />
         </Header>
+
         <InputDate
           type="date"
           value={date}

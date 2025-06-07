@@ -37,7 +37,7 @@ function App() {
       <Route path="/mypage" element={<Mypage />} />
       <Route path="/mypage/recap" element={<Recap />} />
       <Route path="/mypage/monthly" element={<Monthly />} />
-      <Route path="/diary/:diaryDate" element={<Details />} />
+      <Route path="/diary/:diaryId" element={<Details />} />
       <Route path="/voice" element={<Voice />} />
     </Routes>
   );
