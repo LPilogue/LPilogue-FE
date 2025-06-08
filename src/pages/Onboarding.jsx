@@ -19,14 +19,18 @@ const Onboarding = () => {
 
   console.log(formData);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (finalFormData) => {
+    console.log('🔄 제출할 formData:', finalFormData);
+
     try {
-      const res = await editProfile(formData);
+      const res = await editProfile(finalFormData);
       if (res.isSuccess) {
-        console.log('완료');
+        console.log('✅ 프로필 업데이트 완료');
+      } else {
+        console.error('❌ 실패:', res.message);
       }
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      console.error('🚨 에러 발생:', err);
     }
   };
 
@@ -63,11 +67,15 @@ const Onboarding = () => {
       case 5:
         return (
           <Favorite
-            onNext={() => {
-              handleSubmit();
-              setStep(6);
+            onNext={() => setStep(6)}
+            onChange={(value) => {
+              setFormData((prev) => {
+                const updated = { ...prev, artist: value };
+
+                handleSubmit(updated);
+                return updated;
+              });
             }}
-            onChange={(v) => setFormData((prev) => ({ ...prev, artist: v }))}
           />
         );
       case 6:
