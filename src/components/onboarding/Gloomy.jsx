@@ -18,7 +18,7 @@ const ButtonWrapper = styled.div`
   gap: 20px;
 `;
 
-const Gloomy = ({ onNext }) => {
+const Gloomy = ({ onNext, onChange }) => {
   return (
     <Container>
       <Question>
@@ -30,6 +30,7 @@ const Gloomy = ({ onNext }) => {
         <Button
           type="onboarding"
           onClick={() => {
+            onChange(1);
             onNext();
           }}
         >
@@ -38,6 +39,7 @@ const Gloomy = ({ onNext }) => {
         <Button
           type="onboarding"
           onClick={() => {
+            onChange(0);
             onNext();
           }}
         >
