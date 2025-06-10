@@ -11,6 +11,8 @@ import Unlike from '../assets/images/unlike.svg?react';
 import Like from '../assets/images/like.svg?react';
 import setLikeSong from '../api/song/setLikeSong';
 import getRecommend from '../api/song/getRecomend';
+import getDiaryEmotion from '../api/diary/getDiaryEmotion';
+import emotionMap from '../constants/emotion';
 
 const Container = styled.div`
   display: flex;
@@ -113,12 +115,28 @@ const Recommend = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedSong, setSelectedSong] = useState(null);
   const [likeStates, setLikeStates] = useState({});
+  const [emotionLabel, setEmotionLabel] = useState('');
   const iframeRef = useRef(null);
   const navigate = useNavigate();
   const nickname = sessionStorage.getItem('nickname');
   // TODO: api 완성 후 수정 필요
   // const { diaryId } = useParams();
   const diaryId = 19;
+
+  useEffect(() => {
+    const fetchEmotion = async () => {
+      try {
+        const emotionCode = await getDiaryEmotion(diaryId);
+        const label = emotionMap[emotionCode]?.label || '알 수 없음';
+        setEmotionLabel(label);
+      } catch (e) {
+        console.error('감정 조회 실패:', e);
+        setEmotionLabel('오류');
+      }
+    };
+
+    fetchEmotion();
+  }, [diaryId]);
 
   useEffect(() => {
     localStorage.removeItem('representativeSong');
@@ -229,7 +247,7 @@ const Recommend = () => {
         />
       </Header>
       <Text>
-        오늘 행복을 느낀 {nickname}님을 위한
+        오늘 {emotionLabel}을 느낀 {nickname}님을 위한
         <br />
         노래를 추천해줄게요.
       </Text>
