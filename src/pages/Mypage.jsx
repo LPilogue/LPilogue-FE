@@ -107,6 +107,7 @@ const SubText = styled.p`
   font-size: 16px;
   margin-top: 4px;
   maring-left: 35px;
+  cursor: pointer;
 `;
 
 const Mypage = () => {
@@ -142,7 +143,14 @@ const Mypage = () => {
       </RecapButton>
 
       <BottomSection>
-        <SubText>로그아웃</SubText>
+        <SubText
+          onClick={() => {
+            localStorage.removeItem('accessToken');
+            navigate('/');
+          }}
+        >
+          로그아웃
+        </SubText>
         <SubText>회원탈퇴</SubText>
       </BottomSection>
     </Container>

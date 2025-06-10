@@ -34,11 +34,18 @@ function App() {
 
   const isPublic = publicPaths.includes(location.pathname);
 
-  // 토큰 없고, 비공개 경로 접근 시 리디렉션
+  // 토큰 없고, 비공개 경로 접근 시 리다이렉션
   if (!token && !isPublic) {
     window.location.href = '/login';
     return null;
   }
+
+  // 토큰 있는 경우에 회원가입/로그인에 접근 시 홈으로 리다이렉션
+  if (token && isPublic) {
+    window.location.href = '/home';
+    return null;
+  }
+
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
