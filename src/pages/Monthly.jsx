@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import getMonthlyDiary from '../api/diary/getMontlyDiary';
 import RecapCard from '../components/RecapCard';
-import { getMostEmotionMonthly } from '../api/diary/getMostEmotion';
+import { getMostEmotionMonthly } from '../api/user/getMostEmotion';
 
 const Container = styled.div`
   width: 390px;

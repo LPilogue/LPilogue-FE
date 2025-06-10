@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RecapCard from '../components/RecapCard';
-import { getMostEmotionYearly } from '../api/diary/getMostEmotion';
+import { getMostEmotionYearly } from '../api/user/getMostEmotion';
+import getMostArtist from '../api/user/getMostArtist';
+import LPilogue from '../assets/images/Logo_LP.svg?react';
 
 const Container = styled.div`
   width: 390px;
@@ -64,6 +66,7 @@ const CardIcon = styled.div`
 
 const Recap = () => {
   const [emotionData, setEmotionData] = useState(null);
+  const [mostArtist, setMostArtist] = useState(null);
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
@@ -78,7 +81,19 @@ const Recap = () => {
       }
     };
 
+    const fetchArtist = async () => {
+      try {
+        const res = await getMostArtist(currentYear);
+        if (res.isSuccess) {
+          setMostArtist(res.result);
+        }
+      } catch (err) {
+        console.error('아티스트 조회 실패:', err);
+      }
+    };
+
     fetchEmotion();
+    fetchArtist();
   }, [currentYear]);
 
   return (
@@ -90,13 +105,14 @@ const Recap = () => {
       <StyledCard>
         <CardContent>
           <CardTitle>가장 많이 기록한 아티스트</CardTitle>
-          <CardSubtitle>DAY6 5회</CardSubtitle>
+          <CardSubtitle>
+            {mostArtist
+              ? `${mostArtist.artist} ${mostArtist.count}회`
+              : '불러오는 중...'}
+          </CardSubtitle>
         </CardContent>
         <CardIcon>
-          <img
-            src="https://via.placeholder.com/60x60/4285f4/ffffff?text=DAY6"
-            alt="DAY6"
-          />
+          <LPilogue />
         </CardIcon>
       </StyledCard>
 
