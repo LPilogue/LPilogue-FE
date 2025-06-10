@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import Happy from '../components/onboarding/Happy';
-import Gloomy from '../components/onboarding/Gloomy';
-import Stress from '../components/onboarding/Stress';
-import Lonley from '../components/onboarding/Lonely';
-import Favorite from '../components/onboarding/Favorite';
-import Loading from '../components/Loading';
-import editProfile from '../api/user/editProfile';
+import Happy from './Happy';
+import Gloomy from './Gloomy';
+import Stress from './Stress';
+import Lonley from './Lonley';
+import Favorite from './Favorite';
+import Loading from '../Loading';
 
-const Onboarding = () => {
+const Onboarding = ({ handleSubmit }) => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     happy: 0,
@@ -26,19 +25,6 @@ const Onboarding = () => {
 
     const merged = { ...parsed, ...newPartialData };
     sessionStorage.setItem('signupUserData', JSON.stringify(merged));
-  };
-  const handleSubmit = async (finalFormData) => {
-    try {
-      const res = await editProfile(finalFormData);
-      if (res.isSuccess) {
-        console.log('✅ 프로필 업데이트 완료');
-        sessionStorage.removeItem('signupUserData'); // 저장된 값 제거 (선택사항)
-      } else {
-        console.error('❌ 실패:', res.message);
-      }
-    } catch (err) {
-      console.error('🚨 에러 발생:', err);
-    }
   };
 
   const renderStep = () => {

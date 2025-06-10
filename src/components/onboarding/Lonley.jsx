@@ -18,7 +18,7 @@ const ButtonWrapper = styled.div`
   gap: 20px;
 `;
 
-const Stress = ({ onNext, onChange }) => {
+const Lonely = ({ onNext, onChange }) => {
   return (
     <Container>
       <Question>
@@ -50,4 +50,4 @@ const Stress = ({ onNext, onChange }) => {
   );
 };
 
-export default Stress;
+export default Lonely;
