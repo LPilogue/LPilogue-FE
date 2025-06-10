@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import RecapCard from '../components/RecapCard';
 import { getMostEmotionYearly } from '../api/user/getMostEmotion';
 import getMostArtist from '../api/user/getMostArtist';
+import getMostSong from '../api/user/getMostSong';
 import LPilogue from '../assets/images/Logo_LP.svg?react';
 
 const Container = styled.div`
@@ -47,26 +48,19 @@ const CardSubtitle = styled.p`
   font-weight: 600;
 `;
 
-const CardIcon = styled.div`
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-
+const CardAlbum = styled.div`
   img {
-    width: 100%;
-    height: 100%;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
-    border-radius: 50%;
+    border-radius: 15px;
   }
 `;
 
 const Recap = () => {
   const [emotionData, setEmotionData] = useState(null);
   const [mostArtist, setMostArtist] = useState(null);
+  const [mostSong, setMostSong] = useState(null);
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
@@ -92,8 +86,20 @@ const Recap = () => {
       }
     };
 
+    const fetchSong = async () => {
+      try {
+        const res = await getMostSong(currentYear);
+        if (res.isSuccess) {
+          setMostSong(res.result);
+        }
+      } catch (err) {
+        console.error('노래 조회 실패:', err);
+      }
+    };
+
     fetchEmotion();
     fetchArtist();
+    fetchSong();
   }, [currentYear]);
 
   return (
@@ -111,22 +117,25 @@ const Recap = () => {
               : '불러오는 중...'}
           </CardSubtitle>
         </CardContent>
-        <CardIcon>
-          <LPilogue />
-        </CardIcon>
+        <LPilogue height="100px" width="100px" />
       </StyledCard>
 
       <StyledCard>
         <CardContent>
           <CardTitle>가장 많이 기록한 노래</CardTitle>
-          <CardSubtitle>Zombie 6회</CardSubtitle>
+          <CardSubtitle>
+            {mostSong
+              ? `${mostSong.title} ${mostSong.count}회`
+              : '불러오는 중...'}
+          </CardSubtitle>
         </CardContent>
-        <CardIcon>
-          <img
-            src="https://via.placeholder.com/60x60/333333/ffffff?text=♪"
-            alt="Zombie"
-          />
-        </CardIcon>
+        <CardAlbum>
+          {mostSong?.imagePath ? (
+            <img src={mostSong.imagePath} alt={mostSong.title} />
+          ) : (
+            <LPilogue /> // 이미지 없을 때 대체
+          )}
+        </CardAlbum>
       </StyledCard>
     </Container>
   );
