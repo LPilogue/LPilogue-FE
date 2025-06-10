@@ -17,15 +17,22 @@ const Onboarding = () => {
     artist: '',
   });
 
-  console.log(formData);
+  const updateFormData = (newPartialData) => {
+    const updatedFormData = { ...formData, ...newPartialData };
+    setFormData(updatedFormData);
 
+    const prev = sessionStorage.getItem('signupUserData');
+    const parsed = prev ? JSON.parse(prev) : {};
+
+    const merged = { ...parsed, ...newPartialData };
+    sessionStorage.setItem('signupUserData', JSON.stringify(merged));
+  };
   const handleSubmit = async (finalFormData) => {
-    console.log('🔄 제출할 formData:', finalFormData);
-
     try {
       const res = await editProfile(finalFormData);
       if (res.isSuccess) {
         console.log('✅ 프로필 업데이트 완료');
+        sessionStorage.removeItem('signupUserData'); // 저장된 값 제거 (선택사항)
       } else {
         console.error('❌ 실패:', res.message);
       }
@@ -40,28 +47,28 @@ const Onboarding = () => {
         return (
           <Happy
             onNext={() => setStep(2)}
-            onChange={(v) => setFormData((prev) => ({ ...prev, happy: v }))}
+            onChange={(v) => updateFormData({ happy: v })}
           />
         );
       case 2:
         return (
           <Gloomy
             onNext={() => setStep(3)}
-            onChange={(v) => setFormData((prev) => ({ ...prev, sad: v }))}
+            onChange={(v) => updateFormData({ sad: v })}
           />
         );
       case 3:
         return (
           <Stress
             onNext={() => setStep(4)}
-            onChange={(v) => setFormData((prev) => ({ ...prev, stressed: v }))}
+            onChange={(v) => updateFormData({ stressed: v })}
           />
         );
       case 4:
         return (
           <Lonley
             onNext={() => setStep(5)}
-            onChange={(v) => setFormData((prev) => ({ ...prev, lonely: v }))}
+            onChange={(v) => updateFormData({ lonely: v })}
           />
         );
       case 5:
@@ -69,12 +76,9 @@ const Onboarding = () => {
           <Favorite
             onNext={() => setStep(6)}
             onChange={(value) => {
-              setFormData((prev) => {
-                const updated = { ...prev, artist: value };
-
-                handleSubmit(updated);
-                return updated;
-              });
+              const updated = { ...formData, artist: value };
+              updateFormData({ artist: value });
+              handleSubmit(updated);
             }}
           />
         );

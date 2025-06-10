@@ -49,36 +49,29 @@ const Profile = () => {
   const [nickname, setNickname] = useState('');
   const [hasNickname, setHasNickname] = useState(false);
   const [city, setCity] = useState('');
-  const [hasCity, setHasCity] = useState(false);
 
   const navigate = useNavigate();
 
-  return (
-    <Container>
-      {isModalOpen && (
-        <Modal>
-          <span>
-            닉네임으로 불러드릴까요? <br />
-            한번 설정한 닉네임은 <br />
-            변경할 수 없어요.
-          </span>
-          <ButtonWrapper>
-            <Button type="modal" color="#B1B1B1">
-              취소
-            </Button>
-            <Button
-              type="modal"
-              onClick={() => {
-                setIsModalOpen(false);
-                setHasNickname(true);
-              }}
-            >
-              확인
-            </Button>
-          </ButtonWrapper>
-        </Modal>
-      )}
-      {!hasNickname ? (
+  const handleConfirmNickname = () => {
+    const prev = sessionStorage.getItem('signupUserData');
+    const parsed = prev ? JSON.parse(prev) : {};
+    const updated = { ...parsed, nickname };
+    sessionStorage.setItem('signupUserData', JSON.stringify(updated));
+    setHasNickname(true);
+  };
+
+  const handleConfirmCity = async () => {
+    const prev = sessionStorage.getItem('signupUserData');
+    const parsed = prev ? JSON.parse(prev) : {};
+    const updated = { ...parsed, city };
+    sessionStorage.setItem('signupUserData', JSON.stringify(updated));
+
+    navigate('/signup/onboarding');
+  };
+
+  const renderStep = () => {
+    if (!hasNickname) {
+      return (
         <>
           <InputWrapper>
             <Title>어떻게 불러드리면 될까요?</Title>
@@ -88,11 +81,21 @@ const Profile = () => {
               onChange={(e) => setNickname(e.target.value)}
             />
           </InputWrapper>
-          <NextButton type="half" onClick={() => setIsModalOpen(true)}>
+          <NextButton
+            type="half"
+            onClick={() => {
+              setIsModalOpen(true);
+              setHasNickname(true);
+            }}
+          >
             좋아!🥰
           </NextButton>
         </>
-      ) : !hasCity ? (
+      );
+    }
+
+    if (hasNickname) {
+      return (
         <>
           <InputWrapper>
             <Title>
@@ -105,30 +108,60 @@ const Profile = () => {
               onChange={(e) => setCity(e.target.value)}
             />
           </InputWrapper>
-          <NextButton type="half" onClick={() => setHasCity(true)}>
-            알겠어
+          <NextButton type="half" onClick={handleConfirmCity}>
+            완료
           </NextButton>
         </>
-      ) : (
-        <>
-          <Description>
-            일기를 쓰기 전<br />
-            닉네임님에 대해 알고싶어요.
-            <br />
-            <br />
-            앞으로 나올 5가지의 질문에
-            <br /> 닉네임님의 취향을 선택해주세요!
-          </Description>
-          <NextButton
-            type="half"
-            onClick={() => {
-              navigate('/onboarding');
-            }}
-          >
-            알겠어!
-          </NextButton>
-        </>
+      );
+    }
+
+    return (
+      <>
+        <Description>
+          일기를 쓰기 전<br />
+          {nickname}님에 대해 알고싶어요.
+          <br />
+          <br />
+          앞으로 나올 5가지의 질문에
+          <br /> {nickname}님의 취향을 선택해주세요!
+        </Description>
+        <NextButton type="half" onClick={() => navigate('/onboarding')}>
+          알겠어!
+        </NextButton>
+      </>
+    );
+  };
+
+  return (
+    <Container>
+      {isModalOpen && (
+        <Modal>
+          <span>
+            {nickname}님으로 불러드릴까요? <br />
+            한번 설정한 닉네임은 <br />
+            변경할 수 없어요.
+          </span>
+          <ButtonWrapper>
+            <Button
+              type="modal"
+              color="#B1B1B1"
+              onClick={() => setIsModalOpen(false)}
+            >
+              취소
+            </Button>
+            <Button
+              type="modal"
+              onClick={() => {
+                setIsModalOpen(false);
+                handleConfirmNickname();
+              }}
+            >
+              확인
+            </Button>
+          </ButtonWrapper>
+        </Modal>
       )}
+      {renderStep()}
     </Container>
   );
 };
