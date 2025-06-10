@@ -1,6 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../Button';
-import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -23,7 +23,7 @@ const ToRecom = ({ onNext }) => {
   const navigate = useNavigate();
 
   const handleWriteClick = () => {
-    navigate('/onboarding');
+    navigate('/today/profile');
   };
 
   const handleOnboardingClick = () => {

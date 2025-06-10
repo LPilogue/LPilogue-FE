@@ -1,6 +1,7 @@
 const recommend = {
   songs: [
     {
+      id: 1,
       name: 'You Raise Me Up',
       isLiked: false,
       isRep: false,
@@ -10,6 +11,7 @@ const recommend = {
       songURL: 'https://www.youtube.com/watch?v=aJxrX42WcjQ',
     },
     {
+      id: 7,
       name: '한 페이지가 될 수 있게',
       isLiked: false,
       isRep: false,
@@ -20,6 +22,7 @@ const recommend = {
     },
 
     {
+      id: 3,
       name: '너와의 모든 지금',
       isLiked: false,
       isRep: false,
@@ -29,6 +32,7 @@ const recommend = {
       songURL: 'https://www.youtube.com/watch?v=YLxEK0ZKx9A',
     },
     {
+      id: 4,
       name: 'Drowning',
       isLiked: false,
       isRep: false,
@@ -38,6 +42,7 @@ const recommend = {
       songURL: 'https://www.youtube.com/watch?v=NbKH4iZqq1Y',
     },
     {
+      id: 5,
       name: 'Supernova',
       isLiked: false,
       isRep: false,

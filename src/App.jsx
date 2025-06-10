@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Landing from './pages/Landing';
 import Signup from './pages/Signup';
@@ -18,8 +18,35 @@ import Monthly from './pages/Monthly';
 import Recap from './pages/Recap';
 import SignupOnboarding from './pages/SignupOnboarding';
 import EditProfile from './pages/EditProfile';
+import WriteProfile from './pages/WirteProfile';
 
 function App() {
+  const token = localStorage.getItem('accessToken');
+  const location = useLocation();
+
+  // 토큰 없이 접근 가능한 경로 목록
+  const publicPaths = [
+    '/',
+    '/login',
+    '/signup',
+    '/signup/profile',
+    '/signup/onboarding',
+  ];
+
+  const isPublic = publicPaths.includes(location.pathname);
+
+  // 토큰 없고, 비공개 경로 접근 시 리다이렉션
+  if (!token && !isPublic) {
+    window.location.href = '/login';
+    return null;
+  }
+
+  // 토큰 있는 경우에 회원가입/로그인에 접근 시 홈으로 리다이렉션
+  if (token && isPublic) {
+    window.location.href = '/home';
+    return null;
+  }
+
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
@@ -30,6 +57,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/home" element={<Home />} />
       <Route path="/write" element={<Write />} />
+      <Route path="/today/profile" element={<WriteProfile />} />
       <Route path="/loading" element={<Loading />} />
       <Route path="/recommend" element={<Recommend />} />
       <Route path="/recommend/confirm" element={<Representative />} />

@@ -127,18 +127,18 @@ const Home = () => {
   const navigate = useNavigate();
 
   // 임시 데이터 - 실제로는 props나 API에서 받아올 데이터
-  const weatherInfo = '비가 와요.';
+  const weatherInfo = '화창해요';
   const recommendedSong = {
-    artist: '아티스트명',
-    title: '곡 제목',
+    artist: '10CM',
+    title: '너에게 닿기를',
   };
 
   const popularSongs = [
-    { number: 1, artist: '아티스트명', title: '곡제목' },
-    { number: 2, artist: '아티스트명', title: '곡제목' },
-    { number: 3, artist: '아티스트명', title: '곡제목' },
-    { number: 4, artist: '아티스트명', title: '곡제목' },
-    { number: 5, artist: '아티스트명', title: '곡제목' },
+    { number: 1, artist: '이무진', title: '청춘만화' },
+    { number: 2, artist: '10CM', title: '너에게 닿기를' },
+    { number: 3, artist: 'DAY6', title: '한 페이지가 될 수 있게' },
+    { number: 4, artist: 'WOODZ', title: 'Drowning' },
+    { number: 5, artist: 'I DO ME', title: 'KiiKii' },
   ];
 
   const handleWriteClick = () => {
@@ -175,7 +175,7 @@ const Home = () => {
           {popularSongs.map((song) => (
             <SongItem key={song.number}>
               <SongNumber>{song.number}.</SongNumber>
-              <SongInfo>{`{${song.artist}} - {${song.title}}`}</SongInfo>
+              <SongInfo>{`${song.artist} - ${song.title}`}</SongInfo>
             </SongItem>
           ))}
         </SongList>
