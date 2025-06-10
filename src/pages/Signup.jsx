@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import signUp from '../api/auth/signup';
 import duplicateId from '../api/auth/duplicateId';
 
 const Container = styled.div`
@@ -69,6 +68,7 @@ const Signup = () => {
     lonely: 1,
     artist: '',
   });
+
   const [idStatus, setIdStatus] = useState('idle'); // 'idle' | 'valid' | 'invalid'
   const [idValid, setIdValid] = useState(undefined);
   const [pwValid, setPwValid] = useState(undefined);
@@ -108,7 +108,7 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!idValid || !pwValid) {
       alert('입력값을 확인해주세요.');
       return;
@@ -120,28 +120,17 @@ const Signup = () => {
     }
 
     try {
-      const res = await signUp(userData);
-      console.log('응답 확인:', res);
-
-      if (res?.isSuccess) {
-        navigate('/signup/profile');
-      } else {
-        alert(res.message || '회원가입에 실패했습니다.');
-      }
+      sessionStorage.setItem('signupUserData', JSON.stringify(userData));
+      navigate('/signup/profile');
     } catch (err) {
-      console.error('회원가입 실패:', err);
-      alert('회원가입 중 오류가 발생했습니다.');
+      console.error('세션 저장 실패:', err);
+      alert('진행 중 오류가 발생했습니다.');
     }
   };
 
   return (
     <Container>
-      <Button
-        type="header"
-        onClick={() => {
-          handleSubmit();
-        }}
-      >
+      <Button type="header" onClick={handleSubmit}>
         완료
       </Button>
 

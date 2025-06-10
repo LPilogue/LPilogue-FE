@@ -18,7 +18,7 @@ const ButtonWrapper = styled.div`
   gap: 20px;
 `;
 
-const Happy = ({ onNext }) => {
+const Happy = ({ onNext, onChange }) => {
   return (
     <Container>
       <Question>
@@ -29,6 +29,7 @@ const Happy = ({ onNext }) => {
         <Button
           type="onboarding"
           onClick={() => {
+            onChange(1);
             onNext();
           }}
         >
@@ -37,6 +38,7 @@ const Happy = ({ onNext }) => {
         <Button
           type="onboarding"
           onClick={() => {
+            onChange(0);
             onNext();
           }}
         >

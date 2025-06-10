@@ -13,10 +13,11 @@ import Chat from './pages/Chat';
 import Mypage from './pages/Mypage';
 import Details from './pages/Details';
 import Voice from './pages/Voice';
-import Onboarding from './pages/Onboarding';
 import Todayprofile from './pages/Todayprofile';
 import Monthly from './pages/Monthly';
 import Recap from './pages/Recap';
+import SignupOnboarding from './pages/SignupOnboarding';
+import EditProfile from './pages/EditProfile';
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/signup/profile" element={<Profile />} />
-      <Route path="/onboarding" element={<Onboarding />} />
+      <Route path="/signup/onboarding" element={<SignupOnboarding />} />
       <Route path="/onboarding/today" element={<Todayprofile />} />
       <Route path="/login" element={<Login />} />
       <Route path="/home" element={<Home />} />
@@ -35,6 +36,7 @@ function App() {
       <Route path="/recommend/result" element={<Result />} />
       <Route path="/chat" element={<Chat />} />
       <Route path="/mypage" element={<Mypage />} />
+      <Route path="/mypage/profile" element={<EditProfile />} />
       <Route path="/mypage/recap" element={<Recap />} />
       <Route path="/mypage/monthly" element={<Monthly />} />
       <Route path="/diary/:diaryId" element={<Details />} />
