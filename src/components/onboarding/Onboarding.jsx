@@ -4,7 +4,6 @@ import Gloomy from './Gloomy';
 import Stress from './Stress';
 import Lonley from './Lonley';
 import Favorite from './Favorite';
-import Loading from '../Loading';
 
 const Onboarding = ({ handleSubmit }) => {
   const [step, setStep] = useState(1);
@@ -68,8 +67,6 @@ const Onboarding = ({ handleSubmit }) => {
             }}
           />
         );
-      case 6:
-        return <Loading />;
       default:
         return null;
     }

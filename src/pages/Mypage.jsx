@@ -1,5 +1,3 @@
-import React from 'react';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import LP from '../assets/images/Logo_LP.svg';
@@ -119,7 +117,7 @@ const Mypage = () => {
   };
 
   const handleProfileClick = () => {
-    navigate('/signup/profile'); // 기존 Mypage 컴포넌트로 이동
+    navigate('/mypage/profile'); // 기존 Mypage 컴포넌트로 이동
   };
 
   const recapClick = () => {
