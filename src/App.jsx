@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Landing from './pages/Landing';
 import Signup from './pages/Signup';
@@ -20,6 +20,25 @@ import SignupOnboarding from './pages/SignupOnboarding';
 import EditProfile from './pages/EditProfile';
 
 function App() {
+  const token = localStorage.getItem('accessToken');
+  const location = useLocation();
+
+  // 토큰 없이 접근 가능한 경로 목록
+  const publicPaths = [
+    '/',
+    '/login',
+    '/signup',
+    '/signup/profile',
+    '/signup/onboarding',
+  ];
+
+  const isPublic = publicPaths.includes(location.pathname);
+
+  // 토큰 없고, 비공개 경로 접근 시 리디렉션
+  if (!token && !isPublic) {
+    window.location.href = '/login';
+    return null;
+  }
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
