@@ -136,7 +136,7 @@ const Mypage = () => {
       <RecapButton onClick={recapClick}>
         <RecapContent>
           <RecapLogo src={LP} alt="LP Logo" />
-          <span>Recap of (2025)</span>
+          <span>Recap of {new Date().getFullYear()}</span>
         </RecapContent>
         <ArrowIcon>›</ArrowIcon>
       </RecapButton>
