@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +8,9 @@ import rightButton from '../assets/images/rightButton.svg';
 import recommend from '../mockData/recommend';
 import PositiveButton from '../components/PositiveButton';
 import setMainSong from '../api/song/setMainSong';
+import Unlike from '../assets/images/unlike.svg?react';
+import Like from '../assets/images/like.svg?react';
+import setLikeSong from '../api/song/setLikeSong';
 
 const Container = styled.div`
   display: flex;
@@ -79,7 +84,6 @@ const RepresentativeButton = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 20px;
   cursor: pointer;
 
   span {
@@ -96,9 +100,18 @@ const RadioButton = styled.div`
     props.isSelected ? '#d9cdbd' : 'transparent'};
 `;
 
+const Align = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+`;
+
 const Recommend = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedSong, setSelectedSong] = useState(null);
+  const [likeStates, setLikeStates] = useState({});
   const iframeRef = useRef(null);
   const { songs } = recommend || {};
   const navigate = useNavigate();
@@ -159,6 +172,34 @@ const Recommend = () => {
       alert('대표곡 설정 중 오류가 발생했습니다.');
     }
   };
+
+  const handleLike = async (songId) => {
+    if (!likeStates[songId]) {
+      try {
+        const response = await setLikeSong(songId);
+        if (response.isSuccess) {
+          setLikeStates((prev) => ({
+            ...prev,
+            [songId]: 'like',
+          }));
+        } else {
+          alert('좋아요 설정에 실패했습니다.');
+        }
+      } catch (error) {
+        alert('서버 오류로 좋아요 설정에 실패했습니다.');
+      }
+    }
+  };
+
+  const handleUnlike = (songId) => {
+    if (!likeStates[songId]) {
+      setLikeStates((prev) => ({
+        ...prev,
+        [songId]: 'unlike',
+      }));
+    }
+  };
+
   return (
     <Container>
       <Header>
@@ -200,12 +241,32 @@ const Recommend = () => {
         <ArtistName>{currentSong.artist}</ArtistName>
       </SongInfo>
 
-      <RepresentativeButton onClick={handleRepresentativeSelect}>
-        <RadioButton
-          isSelected={selectedSong && selectedSong.name === currentSong.name}
-        />
-        <span>대표곡</span>
-      </RepresentativeButton>
+      <Align>
+        <div onClick={() => handleUnlike(currentSong.id)}>
+          <Unlike
+            style={{
+              opacity: likeStates[currentSong.id] === 'unlike' ? 1 : 0.3,
+              cursor: likeStates[currentSong.id] ? 'default' : 'pointer',
+            }}
+          />
+        </div>
+
+        <RepresentativeButton onClick={handleRepresentativeSelect}>
+          <RadioButton
+            isSelected={selectedSong && selectedSong.name === currentSong.name}
+          />
+          <span>대표곡</span>
+        </RepresentativeButton>
+
+        <div onClick={() => handleLike(currentSong.id)}>
+          <Like
+            style={{
+              opacity: likeStates[currentSong.id] === 'like' ? 1 : 0.3,
+              cursor: likeStates[currentSong.id] ? 'default' : 'pointer',
+            }}
+          />
+        </div>
+      </Align>
     </Container>
   );
 };
