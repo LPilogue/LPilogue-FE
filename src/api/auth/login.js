@@ -8,11 +8,19 @@ const login = async ({ username, password }) => {
   );
 
   const tokenWithBearer = response.data?.result?.accessToken;
+  const nickname = response.data?.result?.nickname;
+
   if (tokenWithBearer) {
     const token = tokenWithBearer.replace('Bearer ', '');
     localStorage.setItem('accessToken', token);
   } else {
     console.warn('응답에 accessToken이 없습니다:', response.data);
+  }
+
+  if (nickname) {
+    sessionStorage.setItem('nickname', nickname);
+  } else {
+    console.warn('응답에 nickname이 없습니다:', response.data);
   }
 
   return response.data;

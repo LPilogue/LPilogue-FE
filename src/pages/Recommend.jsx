@@ -115,6 +115,7 @@ const Recommend = () => {
   const [likeStates, setLikeStates] = useState({});
   const iframeRef = useRef(null);
   const navigate = useNavigate();
+  const nickname = sessionStorage.getItem('nickname');
   // TODO: api 완성 후 수정 필요
   // const { diaryId } = useParams();
   const diaryId = 19;
@@ -228,7 +229,7 @@ const Recommend = () => {
         />
       </Header>
       <Text>
-        오늘 행복을 느낀 닉네임님을 위한
+        오늘 행복을 느낀 {nickname}님을 위한
         <br />
         노래를 추천해줄게요.
       </Text>

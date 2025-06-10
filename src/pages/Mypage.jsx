@@ -112,6 +112,7 @@ const SubText = styled.p`
 
 const Mypage = () => {
   const navigate = useNavigate();
+  const nickname = sessionStorage.getItem('nickname');
 
   const handleDiaryClick = () => {
     navigate('/mypage/monthly'); // 기존 Mypage 컴포넌트로 이동
@@ -127,7 +128,7 @@ const Mypage = () => {
 
   return (
     <Container>
-      <Title>닉네임님</Title>
+      <Title>{nickname}님</Title>
 
       <ButtonGrid>
         <MenuButton onClick={handleDiaryClick}>일기 보기</MenuButton>
