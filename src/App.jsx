@@ -18,6 +18,7 @@ import Monthly from './pages/Monthly';
 import Recap from './pages/Recap';
 import SignupOnboarding from './pages/SignupOnboarding';
 import EditProfile from './pages/EditProfile';
+import WriteProfile from './pages/WirteProfile';
 
 function App() {
   const token = localStorage.getItem('accessToken');
@@ -56,6 +57,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/home" element={<Home />} />
       <Route path="/write" element={<Write />} />
+      <Route path="/today/profile" element={<WriteProfile />} />
       <Route path="/loading" element={<Loading />} />
       <Route path="/recommend" element={<Recommend />} />
       <Route path="/recommend/confirm" element={<Representative />} />
