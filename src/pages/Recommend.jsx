@@ -5,6 +5,7 @@ import leftButton from '../assets/images/leftButton.svg';
 import rightButton from '../assets/images/rightButton.svg';
 import recommend from '../mockData/recommend';
 import PositiveButton from '../components/PositiveButton';
+import setMainSong from '../api/song/setMainSong';
 
 const Container = styled.div`
   display: flex;
@@ -150,18 +151,20 @@ const Recommend = () => {
     }
   };
 
-  const handleRepresentativeSelect = () => {
-    setSelectedSong(currentSong);
-    localStorage.setItem('representativeSong', JSON.stringify(currentSong));
+  const handleRepresentativeSelect = async () => {
+    try {
+      await setMainSong(currentSong.id);
+      setSelectedSong(currentSong);
+    } catch (err) {
+      alert('대표곡 설정 중 오류가 발생했습니다.');
+    }
   };
-
   return (
     <Container>
       <Header>
         <PositiveButton
           onClick={() => {
-            const storedSong = localStorage.getItem('representativeSong');
-            if (storedSong) {
+            if (selectedSong) {
               navigate('/recommend/confirm');
             } else {
               alert('대표곡을 선택해주세요.');
@@ -170,7 +173,7 @@ const Recommend = () => {
         />
       </Header>
       <Text>
-        오늘 행복을 느낀 김가천님을 위한
+        오늘 행복을 느낀 닉네임님을 위한
         <br />
         노래를 추천해줄게요.
       </Text>
