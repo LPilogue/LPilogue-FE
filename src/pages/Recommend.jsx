@@ -5,12 +5,12 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import leftButton from '../assets/images/leftButton.svg';
 import rightButton from '../assets/images/rightButton.svg';
-import recommend from '../mockData/recommend';
 import PositiveButton from '../components/PositiveButton';
 import setMainSong from '../api/song/setMainSong';
 import Unlike from '../assets/images/unlike.svg?react';
 import Like from '../assets/images/like.svg?react';
 import setLikeSong from '../api/song/setLikeSong';
+import getRecommend from '../api/song/getRecomend';
 
 const Container = styled.div`
   display: flex;
@@ -109,16 +109,30 @@ const Align = styled.div`
 `;
 
 const Recommend = () => {
+  const [songs, setSongs] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedSong, setSelectedSong] = useState(null);
   const [likeStates, setLikeStates] = useState({});
   const iframeRef = useRef(null);
-  const { songs } = recommend || {};
   const navigate = useNavigate();
+  // TODO: api 완성 후 수정 필요
+  // const { diaryId } = useParams();
+  const diaryId = 19;
 
   useEffect(() => {
     localStorage.removeItem('representativeSong');
-  }, []);
+
+    const fetchSongs = async () => {
+      try {
+        const result = await getRecommend(diaryId);
+        setSongs(result);
+      } catch (error) {
+        console.error('노래 불러오기 실패:', error);
+      }
+    };
+
+    fetchSongs();
+  }, [diaryId]);
 
   if (!songs || songs.length === 0) {
     return <Container>추천할 노래 데이터가 없습니다.</Container>;
@@ -148,12 +162,12 @@ const Recommend = () => {
   };
 
   const handlePlaySong = () => {
-    const videoURL = songs[currentIndex].songURL;
+    const videoURL = currentSong.songURI;
     const videoID = new URL(videoURL).searchParams.get('v');
     const embedURL = `https://www.youtube.com/embed/${videoID}?autoplay=1`;
 
     if (iframeRef.current) {
-      stopSong(); // 이미 재생 중이면 종료
+      stopSong();
     } else {
       const iframe = document.createElement('iframe');
       iframe.src = embedURL;
@@ -166,7 +180,7 @@ const Recommend = () => {
 
   const handleRepresentativeSelect = async () => {
     try {
-      await setMainSong(currentSong.id);
+      await setMainSong(currentSong.songId);
       setSelectedSong(currentSong);
     } catch (err) {
       alert('대표곡 설정 중 오류가 발생했습니다.');
@@ -227,8 +241,8 @@ const Recommend = () => {
           <img src={leftButton} alt="Left button" />
         </ArrowButton>
         <AlbumImage
-          src={currentSong.filePath}
-          alt={currentSong.name}
+          src={currentSong.songImagePath}
+          alt={currentSong.songName}
           onClick={handlePlaySong}
         />
         <ArrowButton onClick={handleRightClick}>
@@ -237,32 +251,34 @@ const Recommend = () => {
       </SongContainer>
 
       <SongInfo>
-        <SongName>{currentSong.name}</SongName>
+        <SongName>{currentSong.songName}</SongName>
         <ArtistName>{currentSong.artist}</ArtistName>
       </SongInfo>
 
       <Align>
-        <div onClick={() => handleUnlike(currentSong.id)}>
+        <div onClick={() => handleUnlike(currentSong.songId)}>
           <Unlike
             style={{
-              opacity: likeStates[currentSong.id] === 'unlike' ? 1 : 0.3,
-              cursor: likeStates[currentSong.id] ? 'default' : 'pointer',
+              opacity: likeStates[currentSong.songId] === 'unlike' ? 1 : 0.3,
+              cursor: likeStates[currentSong.songId] ? 'default' : 'pointer',
             }}
           />
         </div>
 
         <RepresentativeButton onClick={handleRepresentativeSelect}>
           <RadioButton
-            isSelected={selectedSong && selectedSong.name === currentSong.name}
+            isSelected={
+              selectedSong && selectedSong.songName === currentSong.songName
+            }
           />
           <span>대표곡</span>
         </RepresentativeButton>
 
-        <div onClick={() => handleLike(currentSong.id)}>
+        <div onClick={() => handleLike(currentSong.songId)}>
           <Like
             style={{
-              opacity: likeStates[currentSong.id] === 'like' ? 1 : 0.3,
-              cursor: likeStates[currentSong.id] ? 'default' : 'pointer',
+              opacity: likeStates[currentSong.songId] === 'like' ? 1 : 0.3,
+              cursor: likeStates[currentSong.songId] ? 'default' : 'pointer',
             }}
           />
         </div>
