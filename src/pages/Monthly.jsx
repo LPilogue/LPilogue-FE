@@ -81,6 +81,7 @@ const Monthly = () => {
   const [monthlyDiary, setMonthlyDiary] = useState([]);
   const [emotionData, setEmotionData] = useState(null);
   const navigate = useNavigate();
+  const nickname = sessionStorage.getItem('nickname');
 
   const fetchDiaryData = async (year, month) => {
     try {
@@ -135,7 +136,7 @@ const Monthly = () => {
       </Navigation>
 
       <RecapCard emotionData={emotionData} />
-      <Subtitle>닉네임님이 기록한 노래들이에요.</Subtitle>
+      <Subtitle>{nickname}님이 기록한 노래들이에요.</Subtitle>
 
       <Grid>
         {monthlyDiary.map((entry) => {
