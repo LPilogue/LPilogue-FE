@@ -1,6 +1,6 @@
 import api from '../api';
 
-const getChatbot = async ({ content, emotion }) => {
+export const getChatbot = async ({ content, emotion }) => {
   try {
     const response = await api.post('/chatbot', {
       content,
@@ -15,3 +15,16 @@ const getChatbot = async ({ content, emotion }) => {
 };
 
 export default getChatbot;
+
+export const getCocktails = async (content) => {
+  try {
+    const response = await api.post('/recommendations/cocktails', {
+      content,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('칵테일 추천 요청 실패:', error);
+    throw error;
+  }
+};

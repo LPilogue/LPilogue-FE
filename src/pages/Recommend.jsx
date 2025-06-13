@@ -13,6 +13,9 @@ import setLikeSong from '../api/song/setLikeSong';
 import getRecommend from '../api/song/getRecomend';
 import getDiaryEmotion from '../api/diary/getDiaryEmotion';
 import emotionMap from '../constants/emotion';
+import createDiary from '../api/diary/createDiary';
+import { getCocktails } from '../api/diary/getChatbot';
+// import recommend from '../mockData/recommend';
 
 const Container = styled.div`
   display: flex;
@@ -112,6 +115,7 @@ const Align = styled.div`
 
 const Recommend = () => {
   const [songs, setSongs] = useState([]);
+  // const { songs } = recommend;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedSong, setSelectedSong] = useState(null);
   const [likeStates, setLikeStates] = useState({});
@@ -233,18 +237,41 @@ const Recommend = () => {
     }
   };
 
+  const handleSubmit = async () => {
+    if (!selectedSong) {
+      alert('대표곡을 선택해주세요.');
+      return;
+    }
+
+    try {
+      const content =
+        sessionStorage.getItem('diaryContent') || '오늘 기분이 어땠어요';
+      const cocktailRes = await getCocktails(content);
+
+      await createDiary({
+        diaryId,
+        emotionType: cocktailRes.emotion,
+        cocktailName: cocktailRes.cocktail.name,
+        songs: [
+          {
+            songId: selectedSong.songId,
+            isLiked: likeStates[selectedSong.songId] === 'like' ? 1 : 0,
+            type: 'MAIN',
+          },
+        ],
+      });
+
+      navigate('/recommend/confirm');
+    } catch (error) {
+      console.error('다이어리 저장 실패:', error);
+      alert('다이어리 저장에 실패했습니다.');
+    }
+  };
+
   return (
     <Container>
       <Header>
-        <PositiveButton
-          onClick={() => {
-            if (selectedSong) {
-              navigate('/recommend/confirm');
-            } else {
-              alert('대표곡을 선택해주세요.');
-            }
-          }}
-        />
+        <PositiveButton onClick={handleSubmit} />
       </Header>
       <Text>
         오늘 {emotionLabel}을 느낀 {nickname}님을 위한
