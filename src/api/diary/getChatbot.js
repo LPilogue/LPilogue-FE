@@ -1,9 +1,10 @@
 import api from '../api';
 
-const getChatbot = async ({ content }) => {
+const getChatbot = async ({ content, emotion }) => {
   try {
     const response = await api.post('/chatbot', {
       content,
+      emotion,
     });
 
     return response.data;

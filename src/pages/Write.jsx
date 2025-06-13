@@ -146,8 +146,12 @@ const Write = () => {
     }
 
     try {
+      // ✅ 감정 값 세션에서 가져오기
+      const emotion = sessionStorage.getItem('emotion');
+
       const chatbotResponse = await getChatbot({
         content: text,
+        emotion,
       });
 
       navigate('/chat', { state: { answer: chatbotResponse.answer } });

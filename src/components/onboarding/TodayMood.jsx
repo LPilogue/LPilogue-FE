@@ -19,39 +19,27 @@ const ButtonWrapper = styled.div`
 `;
 
 const ToMood = ({ onNext }) => {
+  const handleEmotionSelect = (emotion) => {
+    sessionStorage.setItem('emotion', emotion);
+    onNext();
+  };
+
   return (
     <Container>
       <Question>오늘의 기분은 어떤가요?</Question>
       <ButtonWrapper>
-        <Button
-          type="onboarding"
-          onClick={() => {
-            onNext();
-          }}
-        >
+        <Button type="onboarding" onClick={() => handleEmotionSelect('happy')}>
           행복해😊
         </Button>
-        <Button
-          type="onboarding"
-          onClick={() => {
-            onNext();
-          }}
-        >
+        <Button type="onboarding" onClick={() => handleEmotionSelect('sad')}>
           슬 퍼😢
         </Button>
-        <Button
-          type="onboarding"
-          onClick={() => {
-            onNext();
-          }}
-        >
+        <Button type="onboarding" onClick={() => handleEmotionSelect('angry')}>
           짜증나🤬
         </Button>
         <Button
           type="onboarding"
-          onClick={() => {
-            onNext();
-          }}
+          onClick={() => handleEmotionSelect('depressed')}
         >
           우울해😔
         </Button>
