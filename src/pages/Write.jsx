@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import sound from '../assets/images/sound.svg';
 import left from '../assets/images/leftButton.svg';
 import PositiveButton from '../components/PositiveButton';
-import createDiary from '../api/diary/createDiary';
+import getChatbot from '../api/diary/getChatbot';
 
 const Container = styled.div`
   display: flex;
@@ -117,24 +117,24 @@ const Write = () => {
   const [date, setDate] = useState(todayString);
   const navigate = useNavigate();
 
-  const mockData = {
-    createdAt: new Date(date).toISOString(),
-    content: text,
-    // TODO: 실제 선택한 데이터로 수정 필요
-    songs: [
-      {
-        name: '한 페이지가 될 수 있게',
-        artist: 'DAY6',
-        songURI: 'https://youtu.be/GWGWxKgsOgg?si=A6COjpNLAyJvYm_j',
-        imagePath:
-          'https://image.bugsm.co.kr/album/images/200/202657/20265759.jpg?version=20211119004415',
-        isLiked: 0,
-        type: 'MAIN',
-      },
-    ],
-    cocktailName: 'Negroni',
-    emotionType: 'HAPPY',
-  };
+  // const mockData = {
+  //   createdAt: new Date(date).toISOString(),
+  //   content: text,
+  //   // TODO: 실제 선택한 데이터로 수정 필요
+  //   songs: [
+  //     {
+  //       name: '한 페이지가 될 수 있게',
+  //       artist: 'DAY6',
+  //       songURI: 'https://youtu.be/GWGWxKgsOgg?si=A6COjpNLAyJvYm_j',
+  //       imagePath:
+  //         'https://image.bugsm.co.kr/album/images/200/202657/20265759.jpg?version=20211119004415',
+  //       isLiked: 0,
+  //       type: 'MAIN',
+  //     },
+  //   ],
+  //   cocktailName: 'Negroni',
+  //   emotionType: 'HAPPY',
+  // };
 
   const handleTextChange = (event) => setText(event.target.value);
   const handleDateChange = (event) => setDate(event.target.value);
@@ -146,11 +146,14 @@ const Write = () => {
     }
 
     try {
-      await createDiary(mockData);
-      navigate('/chat');
+      const chatbotResponse = await getChatbot({
+        content: text,
+      });
+
+      navigate('/chat', { state: { answer: chatbotResponse.answer } });
     } catch (err) {
-      console.error('다이어리 저장 실패:', err);
-      alert('다이어리 저장에 실패했습니다.');
+      console.error('다이어리 저장 또는 AI 응답 실패:', err);
+      alert('다이어리 저장 또는 AI 응답 생성에 실패했습니다.');
     }
   };
 
