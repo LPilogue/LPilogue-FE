@@ -2,6 +2,8 @@ import api from '../api';
 
 export const getChatbot = async ({ content, emotion }) => {
   try {
+    sessionStorage.setItem('content', content);
+
     const response = await api.post('/rec/chatbot', {
       content,
       emotion,

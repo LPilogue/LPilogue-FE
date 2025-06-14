@@ -10,8 +10,8 @@ import setMainSong from '../api/song/setMainSong';
 import Unlike from '../assets/images/unlike.svg?react';
 import Like from '../assets/images/like.svg?react';
 import setLikeSong from '../api/song/setLikeSong';
-import getRecommend from '../api/song/getRecomend';
-import getDiaryEmotion from '../api/diary/getDiaryEmotion';
+import getRecommend from '../api/song/getRecommend';
+// import getDiaryEmotion from '../api/diary/getDiaryEmotion';
 import emotionMap from '../constants/emotion';
 import createDiary from '../api/diary/createDiary';
 import { getCocktails } from '../api/diary/getChatbot';
@@ -119,28 +119,14 @@ const Recommend = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedSong, setSelectedSong] = useState(null);
   const [likeStates, setLikeStates] = useState({});
-  const [emotionLabel, setEmotionLabel] = useState('');
   const iframeRef = useRef(null);
   const navigate = useNavigate();
   const nickname = sessionStorage.getItem('nickname');
   // TODO: api 완성 후 수정 필요
   // const { diaryId } = useParams();
   const diaryId = 19;
-
-  useEffect(() => {
-    const fetchEmotion = async () => {
-      try {
-        const emotionCode = await getDiaryEmotion(diaryId);
-        const label = emotionMap[emotionCode]?.label || '알 수 없음';
-        setEmotionLabel(label);
-      } catch (e) {
-        console.error('감정 조회 실패:', e);
-        setEmotionLabel('오류');
-      }
-    };
-
-    fetchEmotion();
-  }, [diaryId]);
+  const rawEmotion = sessionStorage.getItem('emotion');
+  const emotion = emotionMap[rawEmotion];
 
   useEffect(() => {
     localStorage.removeItem('representativeSong');
@@ -158,7 +144,7 @@ const Recommend = () => {
   }, [diaryId]);
 
   if (!songs || songs.length === 0) {
-    return <Container>추천할 노래 데이터가 없습니다.</Container>;
+    return <Container>Loading..</Container>;
   }
 
   const currentSong = songs[currentIndex];
@@ -274,7 +260,7 @@ const Recommend = () => {
         <PositiveButton onClick={handleSubmit} />
       </Header>
       <Text>
-        오늘 {emotionLabel}을 느낀 {nickname}님을 위한
+        오늘 {emotion.label}을 느낀 {nickname}님을 위한
         <br />
         노래를 추천해줄게요.
       </Text>
