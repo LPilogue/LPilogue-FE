@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import requestPaper from '../assets/images/backgroundImg.svg';
-import recommend from '../mockData/recommend';
 
 const Container = styled.div`
   position: relative;
@@ -47,17 +46,18 @@ const Description = styled.div`
   line-height: 1.5;
 `;
 
-const ResultCocktail = () => {
+const ResultCocktail = ({
+  cocktailName,
+  cocktailImagePath,
+  cocktailDescription,
+}) => {
   return (
     <Container>
       <Content>
         <Title>오늘의 추천 칵테일이에요</Title>
-        <CocktailImg
-          src={recommend.cocktail.filePath}
-          alt={recommend.cocktail.name}
-        />
-        <Name>{recommend.cocktail.name}</Name>
-        <Description>{recommend.cocktail.description}</Description>
+        <CocktailImg src={cocktailImagePath} alt={cocktailName} />
+        <Name>{cocktailName}</Name>
+        <Description>{cocktailDescription}</Description>
       </Content>
     </Container>
   );

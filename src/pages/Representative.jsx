@@ -107,7 +107,9 @@ const RepresentativeConfirm = () => {
         <Button
           variant="confirm"
           onClick={() => {
-            navigate('/recommend/result');
+            navigate('/recommend/result', {
+              state: { diaryId },
+            });
           }}
         >
           좋아!🥰

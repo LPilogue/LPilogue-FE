@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
 import requestPaper from '../assets/images/backgroundImg.svg';
 
 const Container = styled.div`
@@ -54,20 +53,7 @@ const StyledDate = styled.div`
   margin-bottom: 80px;
 `;
 
-const ResultRequest = () => {
-  const [songData, setSongData] = useState({
-    name: '곡명 없음',
-    artist: '아티스트 없음',
-  });
-
-  useEffect(() => {
-    // 로컬스토리지에서 데이터 가져오기
-    const storedSong = localStorage.getItem('representativeSong');
-    if (storedSong) {
-      setSongData(JSON.parse(storedSong));
-    }
-  }, []);
-
+const ResultRequest = ({ songName, artist }) => {
   return (
     <Container>
       <Content>
@@ -80,9 +66,9 @@ const ResultRequest = () => {
         <Line />
         <Info>
           <Song>
-            title: {songData.name}
+            title: {songName}
             <br />
-            artist: {songData.artist}
+            artist: {artist}
           </Song>
           <StyledDate>Date: {new Date().toLocaleDateString()}</StyledDate>
         </Info>
