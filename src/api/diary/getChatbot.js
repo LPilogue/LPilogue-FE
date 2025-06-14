@@ -2,7 +2,7 @@ import api from '../api';
 
 export const getChatbot = async ({ content, emotion }) => {
   try {
-    const response = await api.post('/chatbot', {
+    const response = await api.post('/rec/chatbot', {
       content,
       emotion,
     });
@@ -18,7 +18,7 @@ export default getChatbot;
 
 export const getCocktails = async (content) => {
   try {
-    const response = await api.post('/recommendations/cocktails', {
+    const response = await api.post('/rec/recommendations/cocktails', {
       content,
     });
 

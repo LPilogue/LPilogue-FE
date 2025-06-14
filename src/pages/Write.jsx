@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import sound from '../assets/images/sound.svg';
 import left from '../assets/images/leftButton.svg';
 import PositiveButton from '../components/PositiveButton';
-import getChatbot from '../api/diary/getChatbot';
+import { getChatbot } from '../api/diary/getChatbot';
 
 const Container = styled.div`
   display: flex;
@@ -116,6 +116,7 @@ const Write = () => {
   const [text, setText] = useState('');
   const [date, setDate] = useState(todayString);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   // const mockData = {
   //   createdAt: new Date(date).toISOString(),
@@ -146,7 +147,7 @@ const Write = () => {
     }
 
     try {
-      // ✅ 감정 값 세션에서 가져오기
+      setLoading(true);
       const emotion = sessionStorage.getItem('emotion');
 
       const chatbotResponse = await getChatbot({
@@ -158,8 +159,14 @@ const Write = () => {
     } catch (err) {
       console.error('다이어리 저장 또는 AI 응답 실패:', err);
       alert('다이어리 저장 또는 AI 응답 생성에 실패했습니다.');
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <div>AI 답변 생성 중..</div>;
+  }
 
   return (
     <Container>
