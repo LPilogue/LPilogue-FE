@@ -124,7 +124,6 @@ const Recommend = () => {
   const nickname = sessionStorage.getItem('nickname');
   // TODO: api 완성 후 수정 필요
   // const { diaryId } = useParams();
-  const diaryId = 19;
   const rawEmotion = sessionStorage.getItem('emotion');
   const emotion = emotionMap[rawEmotion];
 
@@ -133,7 +132,7 @@ const Recommend = () => {
 
     const fetchSongs = async () => {
       try {
-        const result = await getRecommend(diaryId);
+        const result = await getRecommend();
         setSongs(result);
       } catch (error) {
         console.error('노래 불러오기 실패:', error);
@@ -141,7 +140,7 @@ const Recommend = () => {
     };
 
     fetchSongs();
-  }, [diaryId]);
+  }, []);
 
   if (!songs || songs.length === 0) {
     return <Container>Loading..</Container>;
@@ -234,8 +233,7 @@ const Recommend = () => {
         sessionStorage.getItem('diaryContent') || '오늘 기분이 어땠어요';
       const cocktailRes = await getCocktails(content);
 
-      await createDiary({
-        diaryId,
+      const diaryRes = await createDiary({
         emotionType: cocktailRes.emotion,
         cocktailName: cocktailRes.cocktail.name,
         songs: [
@@ -247,7 +245,13 @@ const Recommend = () => {
         ],
       });
 
-      navigate('/recommend/confirm');
+      const diaryId = diaryRes?.result?.diaryId;
+
+      if (!diaryId) {
+        throw new Error('diaryId가 응답에 없습니다.');
+      }
+
+      navigate('/recommend/confirm', { state: { diaryId } });
     } catch (error) {
       console.error('다이어리 저장 실패:', error);
       alert('다이어리 저장에 실패했습니다.');
