@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import getWeatherSong from '../api/song/getWeatherSong';
+import weatherMap from '../constants/weather';
 
 const Container = styled.div`
   max-width: 390px;
@@ -129,6 +130,7 @@ const Home = () => {
 
   const [weatherInfo, setWeatherInfo] = useState('');
   const [recommendedSong, setRecommendedSong] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const popularSongs = [
     { number: 1, artist: '이무진', title: '청춘만화' },
@@ -150,22 +152,32 @@ const Home = () => {
     const fetchWeatherSong = async () => {
       try {
         const data = await getWeatherSong();
-        // 응답 데이터가 배열이라 가정하고 첫 곡만 사용
-        if (data.length > 0) {
+        console.log(data);
+
+        if (data.songs.length > 0) {
           setRecommendedSong({
-            artist: data[0].artist,
-            title: data[0].name,
+            artist: data.songs[0].artist,
+            title: data.songs[0].name,
           });
-          // 예: 날씨에 따라 텍스트 설정 (없으면 생략 가능)
-          setWeatherInfo('화창한 날씨');
+          setWeatherInfo(data.weather);
         }
       } catch (err) {
         console.error('날씨 기반 추천 실패:', err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchWeatherSong();
   }, []);
+
+  if (loading) {
+    return (
+      <Container>
+        <MainContent>추천 정보를 불러오는 중입니다...</MainContent>
+      </Container>
+    );
+  }
 
   return (
     <Container>
@@ -174,19 +186,11 @@ const Home = () => {
       </Header>
 
       <MainContent>
-        <WeatherInfo>
-          오늘은 {weatherInfo || '날씨 정보를 불러오는 중...'}
-        </WeatherInfo>
+        <WeatherInfo>오늘은 {weatherMap[weatherInfo]}</WeatherInfo>
         <SuggestionText>이런 날엔</SuggestionText>
-        {recommendedSong ? (
-          <SongRecommendation>
-            {recommendedSong.artist} - {recommendedSong.title}
-          </SongRecommendation>
-        ) : (
-          <RecommendationMessage>
-            추천곡을 불러오는 중입니다...
-          </RecommendationMessage>
-        )}
+        <SongRecommendation>
+          {recommendedSong.artist} - {recommendedSong.title}
+        </SongRecommendation>
         {recommendedSong && (
           <RecommendationMessage>을 추천드릴게요!😊</RecommendationMessage>
         )}

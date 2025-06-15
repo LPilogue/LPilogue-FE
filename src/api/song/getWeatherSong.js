@@ -13,7 +13,7 @@ const getWeatherSong = async () => {
       console.warn('dislikeSong API 실패, 빈 리스트로 대체:', err);
     }
 
-    const response = await api.post('/recommendations/songs/weather', {
+    const response = await api.post('/rec/recommendations/songs/weather', {
       user_id: userId,
       badSongList,
     });
