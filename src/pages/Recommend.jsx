@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import leftButton from '../assets/images/leftButton.svg';
@@ -10,9 +10,12 @@ import setMainSong from '../api/song/setMainSong';
 import Unlike from '../assets/images/unlike.svg?react';
 import Like from '../assets/images/like.svg?react';
 import setLikeSong from '../api/song/setLikeSong';
-import getRecommend from '../api/song/getRecomend';
-import getDiaryEmotion from '../api/diary/getDiaryEmotion';
-import emotionMap from '../constants/emotion';
+// import getRecommend from '../api/song/getRecommend';
+// import getDiaryEmotion from '../api/diary/getDiaryEmotion';
+// import emotionMap from '../constants/emotion';
+import createDiary from '../api/diary/createDiary';
+import { getCocktails } from '../api/diary/getChatbot';
+import recommend from '../mockData/recommend';
 
 const Container = styled.div`
   display: flex;
@@ -111,50 +114,37 @@ const Align = styled.div`
 `;
 
 const Recommend = () => {
-  const [songs, setSongs] = useState([]);
+  // const [songs, setSongs] = useState([]);
+  const { songs } = recommend;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedSong, setSelectedSong] = useState(null);
   const [likeStates, setLikeStates] = useState({});
-  const [emotionLabel, setEmotionLabel] = useState('');
   const iframeRef = useRef(null);
   const navigate = useNavigate();
   const nickname = sessionStorage.getItem('nickname');
   // TODO: api 완성 후 수정 필요
   // const { diaryId } = useParams();
-  const diaryId = 19;
+  // const rawEmotion = sessionStorage.getItem('emotion');
+  // const emotion = emotionMap[rawEmotion];
+  const emotion = '기쁨';
 
-  useEffect(() => {
-    const fetchEmotion = async () => {
-      try {
-        const emotionCode = await getDiaryEmotion(diaryId);
-        const label = emotionMap[emotionCode]?.label || '알 수 없음';
-        setEmotionLabel(label);
-      } catch (e) {
-        console.error('감정 조회 실패:', e);
-        setEmotionLabel('오류');
-      }
-    };
+  // useEffect(() => {
+  //   localStorage.removeItem('representativeSong');
 
-    fetchEmotion();
-  }, [diaryId]);
+  //   const fetchSongs = async () => {
+  //     try {
+  //       const result = await getRecommend();
+  //       setSongs(result);
+  //     } catch (error) {
+  //       console.error('노래 불러오기 실패:', error);
+  //     }
+  //   };
 
-  useEffect(() => {
-    localStorage.removeItem('representativeSong');
-
-    const fetchSongs = async () => {
-      try {
-        const result = await getRecommend(diaryId);
-        setSongs(result);
-      } catch (error) {
-        console.error('노래 불러오기 실패:', error);
-      }
-    };
-
-    fetchSongs();
-  }, [diaryId]);
+  //   fetchSongs();
+  // }, []);
 
   if (!songs || songs.length === 0) {
-    return <Container>추천할 노래 데이터가 없습니다.</Container>;
+    return <Container>Loading..</Container>;
   }
 
   const currentSong = songs[currentIndex];
@@ -199,21 +189,21 @@ const Recommend = () => {
 
   const handleRepresentativeSelect = async () => {
     try {
-      await setMainSong(currentSong.songId);
+      await setMainSong(currentSong.id);
       setSelectedSong(currentSong);
     } catch (err) {
       alert('대표곡 설정 중 오류가 발생했습니다.');
     }
   };
 
-  const handleLike = async (songId) => {
-    if (!likeStates[songId]) {
+  const handleLike = async (id) => {
+    if (!likeStates[id]) {
       try {
-        const response = await setLikeSong(songId);
+        const response = await setLikeSong(id);
         if (response.isSuccess) {
           setLikeStates((prev) => ({
             ...prev,
-            [songId]: 'like',
+            [id]: 'like',
           }));
         } else {
           alert('좋아요 설정에 실패했습니다.');
@@ -224,30 +214,59 @@ const Recommend = () => {
     }
   };
 
-  const handleUnlike = (songId) => {
-    if (!likeStates[songId]) {
+  const handleUnlike = (id) => {
+    if (!likeStates[id]) {
       setLikeStates((prev) => ({
         ...prev,
-        [songId]: 'unlike',
+        [id]: 'unlike',
       }));
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedSong) {
+      alert('대표곡을 선택해주세요.');
+      return;
+    }
+
+    try {
+      const content =
+        sessionStorage.getItem('diaryContent') || '오늘 기분이 어땠어요';
+      const cocktailRes = await getCocktails(content);
+
+      const diaryRes = await createDiary({
+        emotionType: cocktailRes.emotion,
+        cocktailName: cocktailRes.cocktail.name,
+        songs: [
+          {
+            id: selectedSong.id,
+            isLiked: likeStates[selectedSong.id] === 'like' ? 1 : 0,
+            type: 'MAIN',
+          },
+        ],
+      });
+
+      const diaryId = diaryRes?.result?.diaryId;
+
+      if (!diaryId) {
+        throw new Error('diaryId가 응답에 없습니다.');
+      }
+
+      navigate('/recommend/confirm', { state: { diaryId } });
+    } catch (error) {
+      console.error('다이어리 저장 실패:', error);
+      alert('다이어리 저장에 실패했습니다.');
     }
   };
 
   return (
     <Container>
       <Header>
-        <PositiveButton
-          onClick={() => {
-            if (selectedSong) {
-              navigate('/recommend/confirm');
-            } else {
-              alert('대표곡을 선택해주세요.');
-            }
-          }}
-        />
+        <PositiveButton onClick={handleSubmit} />
       </Header>
       <Text>
-        오늘 {emotionLabel}을 느낀 {nickname}님을 위한
+        오늘 {emotion}을 느낀 {nickname}님을 위한
+        {/* 오늘 {emotion.label}을 느낀 {nickname}님을 위한 */}
         <br />
         노래를 추천해줄게요.
       </Text>
@@ -275,11 +294,11 @@ const Recommend = () => {
       </SongInfo>
 
       <Align>
-        <div onClick={() => handleUnlike(currentSong.songId)}>
+        <div onClick={() => handleUnlike(currentSong.id)}>
           <Unlike
             style={{
-              opacity: likeStates[currentSong.songId] === 'unlike' ? 1 : 0.3,
-              cursor: likeStates[currentSong.songId] ? 'default' : 'pointer',
+              opacity: likeStates[currentSong.id] === 'unlike' ? 1 : 0.3,
+              cursor: likeStates[currentSong.id] ? 'default' : 'pointer',
             }}
           />
         </div>
@@ -293,11 +312,11 @@ const Recommend = () => {
           <span>대표곡</span>
         </RepresentativeButton>
 
-        <div onClick={() => handleLike(currentSong.songId)}>
+        <div onClick={() => handleLike(currentSong.id)}>
           <Like
             style={{
-              opacity: likeStates[currentSong.songId] === 'like' ? 1 : 0.3,
-              cursor: likeStates[currentSong.songId] ? 'default' : 'pointer',
+              opacity: likeStates[currentSong.id] === 'like' ? 1 : 0.3,
+              cursor: likeStates[currentSong.id] ? 'default' : 'pointer',
             }}
           />
         </div>

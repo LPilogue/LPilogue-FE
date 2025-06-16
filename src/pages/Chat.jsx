@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import LPilogue from '../assets/images/Logo_LP.svg';
-import chat from '../mockData/chatbot';
+// import chat from '../mockData/chatbot';
 
 const ChatContainer = styled.div`
   max-width: 390px;
@@ -90,7 +90,8 @@ const Chat = () => {
   const [displayedText, setDisplayedText] = useState('');
   const [isTypingDone, setIsTypingDone] = useState(false);
   const navigate = useNavigate();
-  const fullText = chat.content;
+  const location = useLocation();
+  const fullText = location.state?.answer || '대화가 없습니다.';
 
   useEffect(() => {
     let index = 0;
@@ -120,7 +121,6 @@ const Chat = () => {
         </ChatBoxWrapper>
       </ChatWrapper>
 
-      {/* 모든 글자가 출력되면 ResponseBox 표시 */}
       {isTypingDone && (
         <ResponseBox
           onClick={() => {

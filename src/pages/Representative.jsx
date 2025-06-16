@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import getMainSong from '../api/song/getMainSong';
 
 const Container = styled.div`
   display: flex;
@@ -61,29 +62,41 @@ const Button = styled.button`
 
 const RepresentativeConfirm = () => {
   const [songData, setSongData] = useState(null);
+  const location = useLocation();
   const navigate = useNavigate();
+  const diaryId = location.state?.diaryId;
+  // const diaryId = 19;
 
   useEffect(() => {
-    // 로컬스토리지에서 대표곡 데이터 불러오기
-    const storedSong = localStorage.getItem('representativeSong');
-    if (storedSong) {
-      setSongData(JSON.parse(storedSong));
-    }
-  }, []);
+    if (!diaryId) return;
+
+    const fetchMainSong = async () => {
+      try {
+        const result = await getMainSong(diaryId);
+        if (result && result.length > 0) {
+          setSongData(result[0]);
+        }
+      } catch (err) {
+        console.error('대표곡 불러오기 실패:', err);
+      }
+    };
+
+    fetchMainSong();
+  }, [diaryId]);
 
   const handleRetry = () => {
-    navigate('/recommend'); // 이전 추천 페이지로 돌아가기
+    navigate('/recommend');
   };
 
   if (!songData) {
-    return <Container>대표곡 정보가 없습니다.</Container>;
+    return <Container>대표곡 정보를 불러오는 중입니다...</Container>;
   }
 
   return (
     <Container>
-      <SongImage src={songData.filePath} alt={songData.name} />
+      <SongImage src={songData.songImagePath} alt={songData.songName} />
       <Description>
-        &lt;{songData.name}&gt;
+        &lt;{songData.songName}&gt;
         <br />
         오늘의 대표곡으로 설정할까요?
       </Description>
@@ -94,7 +107,9 @@ const RepresentativeConfirm = () => {
         <Button
           variant="confirm"
           onClick={() => {
-            navigate('/recommend/result');
+            navigate('/recommend/result', {
+              state: { diaryId },
+            });
           }}
         >
           좋아!🥰

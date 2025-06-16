@@ -1,6 +1,6 @@
 import api from '../api';
 
-const getRecommend = async (diaryId) => {
+const getMainSong = async (diaryId) => {
   try {
     const response = await api.get(`/diaries/${diaryId}/songs`);
     return response.data.result.diarySongList;
@@ -10,4 +10,4 @@ const getRecommend = async (diaryId) => {
   }
 };
 
-export default getRecommend;
+export default getMainSong;
